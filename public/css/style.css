@@ -1,0 +1,44 @@
+:root {
+  --bs-primary:   #3B82F6;  /* helles Blau */
+  --bs-dark:      #1E3A8A;  /* dunkles Blau */
+  --bs-warning:   #FACC15;  /* gelb */
+  --bs-body-bg:   #F9FAFB;  /* helles Grau-Weiß */
+  --bs-body-color: #1E293B; /* dunkelgrau-blau */
+}
+
+body {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--bs-dark);
+}
+
+.navbar-brand, .nav-link {
+  color: #fff !important;
+}
+
+.nav-link:hover {
+  color: var(--bs-warning) !important;
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--bs-warning);
+  border-color: var(--bs-warning);
+  color: var(--bs-body-color);
+}
+
+/* Karten (z. B. für Login/Register) */
+.card {
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
