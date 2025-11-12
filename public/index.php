@@ -10,9 +10,18 @@
 
 $IsLoggedIn = true;
 
+$page = $_GET['page'] ?? 'home';
+
+$allowedPages = ['home', 'about'];
+if (!in_array($page, $allowedPages)) {
+    $page = 'home';
+}
+
+
+
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
-require_once __DIR__ . '/../pages/home.php';
+require_once __DIR__ . "/../pages/$page.php";
 require_once __DIR__ . '/../includes/footer.php';
 ?>
 
