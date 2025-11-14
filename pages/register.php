@@ -1,53 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrierung</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <style>
-        .register {
-            background-color: #F9FAFB;
-        }
-        
-        .register__card {
-            width: 400px; 
-            max-width: 100%; 
-            border: none;
-        }
-
-        .register__card--title {
-            color: #1E3A8A;
-        }
-
-        .register__upload {
-            color: #6e7174;
-        }
-
-        .register__button {
-            background-color: #3B82F6;
-            border: none;
-        }
-
-        .register__button:hover {
-            background-color: #FACC15;
-            color: #1E293B;
-        }
-
-        .register__link {
-            text-decoration: none;
-        }
-
-        .register__link:hover {
-            color: #1E3A8A;
-        }
-    </style>
-</head>
-
-<body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
     <section class="register">
@@ -85,14 +36,11 @@
                                 class="btn btn-primary fw-semibold col-12 mb-3 register__button">Account erstellen</button>
                         </form>
                         <p>
-                            Schon einen Account? <a href="login.php" class="register__link">Jetzt einloggen</a>
+                            Schon einen Account? <a href="?page=login" class="register__link">Jetzt einloggen</a>
                         </p>
                     </div>
 
                 </div>
             </div>
         </div>
-    </section>
-</body>
-
-</html>
+</section>

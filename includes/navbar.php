@@ -16,10 +16,10 @@
         
         <?php if (isset($IsLoggedIn) && $IsLoggedIn): ?> 
           <!-- Wenn eingeloggt -->
-          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="#">Logout</a></li>
+          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="?page=login">Logout</a></li>
         <?php else: ?>
           <!-- Wenn ausgeloggt -->
-          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="#">Login</a></li>
+          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="?page=login">Login</a></li>
           <?php endif; ?>
 
       </ul>
