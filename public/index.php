@@ -7,12 +7,12 @@
 </head>
 <body>
 <?php
-
-$IsLoggedIn = true;
+session_start();
+$IsLoggedIn = isset($_SESSION["user"]);
 
 $page = $_GET['page'] ?? 'home';
 
-$allowedPages = ['home', 'about', 'login','register'];
+$allowedPages = ['home', 'about', 'login', 'register', 'logout'];
 if (!in_array($page, $allowedPages)) {
     $page = 'home';
 }
