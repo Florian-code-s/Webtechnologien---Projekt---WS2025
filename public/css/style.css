@@ -109,3 +109,9 @@ body {
         .login__link:hover {
             color: #1E3A8A;
         }
+
+        .finishedLessons__card {
+            width: 800px; 
+            max-width: 100%; 
+            border: none;
+        }

@@ -12,13 +12,13 @@ $IsLoggedIn = isset($_SESSION["user"]);
 
 $page = $_GET['page'] ?? 'home';
 
-$allowedPages = ['home', 'about', 'login', 'register', 'logout'];
+$allowedPages = ['home', 'about', 'login', 'register', 'logout', 'finishedLessons'];
 if (!in_array($page, $allowedPages)) {
     $page = 'home';
 }
 
 
-
+require_once __DIR__ . '/../functions/objects.php';
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
 require_once __DIR__ . "/../pages/$page.php";
