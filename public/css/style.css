@@ -110,8 +110,31 @@ body {
             color: #1E3A8A;
         }
 
+        .finishedLessons {
+            background-color: #F9FAFB;
+        }
+
         .finishedLessons__card {
             width: 800px; 
             max-width: 100%; 
             border: none;
         }
+
+        .finishedLessons__card--title {
+            color: #1E3A8A;
+        }
+
+        .lessons {
+            background-color: #F9FAFB;
+        }
+
+        .lessons__card {
+            width: 800px; 
+            max-width: 100%; 
+            border: none;
+        }
+
+        .lessons__card--title {
+            color: #1E3A8A;
+        }
+

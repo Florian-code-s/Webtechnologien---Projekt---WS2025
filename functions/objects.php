@@ -7,4 +7,11 @@ class LessonResult {
         $this->date = $date;
     }
 }
+
+class Lesson {
+    public $name;
+    public function __construct($name) {
+        $this->name = $name;
+    }
+}
 ?>

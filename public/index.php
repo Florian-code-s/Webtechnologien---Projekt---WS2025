@@ -12,7 +12,7 @@ $IsLoggedIn = isset($_SESSION["user"]);
 
 $page = $_GET['page'] ?? 'home';
 
-$allowedPages = ['home', 'about', 'login', 'register', 'logout', 'finishedLessons'];
+$allowedPages = ['home', 'about', 'login', 'register', 'logout', 'finishedLessons', 'lessons'];
 if (!in_array($page, $allowedPages)) {
     $page = 'home';
 }

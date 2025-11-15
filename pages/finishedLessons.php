@@ -10,11 +10,11 @@ $finishedLessons = getFinishedLessons();
 
 <?php if (isset($IsLoggedIn) && $IsLoggedIn): ?>
     <!-- Wenn eingeloggt -->
-    <section class="login">
-        <div class="d-flex justify-content-center align-items-center vh-100">
+    <section class="finishedLessons">
+        <div class="d-flex justify-content-center align-items-center">
             <div class="card shadow finishedLessons__card">
                 <div class="card-body">
-                    <h2 class="card-title mb-4 mt-2 text-center login__card--title">Absolvierte Lessons</h2>
+                    <h2 class="card-title mb-4 mt-2 text-center finishedLessons__card--title">Absolvierte Lessons</h2>
                     <div class="card-text justify-content-start">
                         <ol>
                             <?php
