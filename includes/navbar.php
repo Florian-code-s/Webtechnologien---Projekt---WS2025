@@ -18,7 +18,7 @@
         <?php if (isset($_SESSION["user"])): ?> 
         <li class="nav-item"><a class="nav-link text-white" href="?page=profile">Profil</a></li>
         <li class="nav-item">
-          <a class="nav-link text-warning fw-bold" href="?logout=1">Logout</a>
+          <a class="nav-link text-warning fw-bold" href="?page=logout">Logout</a>
         </li>
         <?php else: ?>
         <li class="nav-item">
