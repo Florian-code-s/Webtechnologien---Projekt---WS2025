@@ -52,14 +52,14 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-    if (isset($_FILES["picture"])) {
+    if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
             return;
         }
         ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], "../uploads/" . $safeUsername . "." . getFileSuffix($picture["name"]));
+        move_uploaded_file($picture["tmp_name"], "../uploads/" . $safeUsername . ".img");
         //echo realpath("../uploads/" . $safeUsername . getFileSuffix($picture["name"]));
     }
     //To Do: save user in DB

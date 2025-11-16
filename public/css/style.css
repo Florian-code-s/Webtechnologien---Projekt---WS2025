@@ -56,16 +56,16 @@ body {
             color: #1E3A8A;
         }
 
-        .register__upload {
+        .register__upload, .profile__upload {
             color: #6e7174;
         }
 
-        .register__button, .changePassword__button {
+        .register__button, .changePassword__button, .profile__button {
             background-color: #3B82F6;
             border: none;
         }
 
-        .register__button:hover, .changePassword__button:hover {
+        .register__button:hover, .changePassword__button:hover, .profile__button:hover {
             background-color: #FACC15;
             color: #1E293B;
         }
@@ -93,7 +93,7 @@ body {
             border: none;
         }
 
-        .login__card--title, .changePassword__title {
+        .login__card--title, .changePassword__title, .profile__title {
             color: #1E3A8A;
         }
 
@@ -141,4 +141,11 @@ body {
         .changePassword {
             width: 400px; 
             max-width: 100%;
+        }
+
+        .profile__image {
+          max-height: 300px;
+          max-width: 300px;
+          height: auto;
+          width: auto;
         }

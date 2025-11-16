@@ -16,6 +16,7 @@
         
         <?php if (isset($IsLoggedIn) && $IsLoggedIn): ?> 
           <!-- Wenn eingeloggt -->
+          <li class="nav-item"><a class="nav-link text-white" href="?page=profile">Profil</a></li>
           <li class="nav-item"><a class="nav-link text-warning fw-bold" href="?page=logout">Logout</a></li>
         <?php else: ?>
           <!-- Wenn ausgeloggt -->
