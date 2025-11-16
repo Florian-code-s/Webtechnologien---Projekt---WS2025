@@ -60,12 +60,12 @@ body {
             color: #6e7174;
         }
 
-        .register__button {
+        .register__button, .changePassword__button {
             background-color: #3B82F6;
             border: none;
         }
 
-        .register__button:hover {
+        .register__button:hover, .changePassword__button:hover {
             background-color: #FACC15;
             color: #1E293B;
         }
@@ -93,7 +93,7 @@ body {
             border: none;
         }
 
-        .login__card--title {
+        .login__card--title, .changePassword__title {
             color: #1E3A8A;
         }
 
@@ -138,3 +138,7 @@ body {
             color: #1E3A8A;
         }
 
+        .changePassword {
+            width: 400px; 
+            max-width: 100%;
+        }
