@@ -121,7 +121,7 @@ body {
             border: none;
         }
 
-        .finishedLessons__card--title {
+        .finishedLessons__card--title, .finishedLessonsDiagram__title {
             color: #1E3A8A;
         }
 
@@ -149,4 +149,8 @@ body {
           max-width: 300px;
           height: auto;
           width: auto;
+        }
+
+        .finishedLessonsDigramFinished {
+          background-color: #3B82F6;
         }

@@ -24,6 +24,7 @@ $finishedLessons = getFinishedLessons();
                             ?>
                         </ol>
                     </div>
+                    <?php require_once __DIR__ . "/../pages/finishedLessonsDiagram.php"; ?>
                 </div>
             </div>
         </div>
