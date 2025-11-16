@@ -12,7 +12,9 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
     if(checkCredentials($safeUsername, $safePassword)) {
         $_SESSION["user"] = $safeUsername;
-        header("Location: ./?page=home");        
+        $_SESSION["logged_in"] = true;
+        header("Location: ?page=home");
+        exit;
     }
 }
 ?>
@@ -28,7 +30,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
                 <div class="card-body">
                     <h2 class="card-title mb-4 mt-2 login__card--title">Anmelden</h2>
                     <div class="card-text">
-                        <form action="./?page=login" method="POST"> 
+                        <form action="?page=login" method="POST"> 
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Benutzername"
                                     required>
