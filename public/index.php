@@ -7,8 +7,13 @@
 </head>
 <body>
 <?php
-session_start();
-$IsLoggedIn = isset($_SESSION["user"]);
+
+if (!isset($_SESSION["logged_in"])) {
+    $_SESSION["logged_in"] = false;
+}
+
+
+
 
 $page = $_GET['page'] ?? 'home';
 
@@ -18,7 +23,7 @@ if (!in_array($page, $allowedPages)) {
 }
 
 
-require_once __DIR__ . '/../functions/objects.php';
+
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
 require_once __DIR__ . "/../pages/$page.php";

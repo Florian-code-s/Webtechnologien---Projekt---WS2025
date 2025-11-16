@@ -14,14 +14,15 @@
         <li class="nav-item"><a class="nav-link text-white" href="?page=about">Über uns</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="#">Kontakt</a></li>
         
-        <?php if (isset($IsLoggedIn) && $IsLoggedIn): ?> 
-          <!-- Wenn eingeloggt -->
-          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="?page=logout">Logout</a></li>
+        <?php if (isset($_SESSION["user"])): ?> 
+        <li class="nav-item">
+          <a class="nav-link text-warning fw-bold" href="?logout=1">Logout</a>
+        </li>
         <?php else: ?>
-          <!-- Wenn ausgeloggt -->
-          <li class="nav-item"><a class="nav-link text-warning fw-bold" href="?page=login">Login</a></li>
-          <?php endif; ?>
-
+        <li class="nav-item">
+          <a class="nav-link text-warning fw-bold" href="?page=login">Login</a>
+        </li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>
