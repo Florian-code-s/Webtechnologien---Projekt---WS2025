@@ -30,7 +30,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
                 <div class="card-body">
                     <h2 class="card-title mb-4 mt-2 login__card--title">Anmelden</h2>
                     <div class="card-text">
-                        <form action="login.php" method="POST"> 
+                        <form action="?page=login" method="POST"> 
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Benutzername"
                                     required>
