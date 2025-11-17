@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg" style="background-color:#1E3A8A;">
+<nav class="navbar navbar-expand-lg sticky-top" style="background-color:#1E3A8A;">
   <div class="container">
     <a class="navbar-brand text-white fw-bold" href="#">PlatzhalterName</a>
 
@@ -12,11 +12,11 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link text-white" href="?page=home">Home</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="?page=about">Über uns</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#">Kontakt</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="?page=wiki">Wiki</a></li>
         
         <?php if (isset($_SESSION["user"])): ?> 
         <li class="nav-item">
-          <a class="nav-link text-warning fw-bold" href="?logout=1">Logout</a>
+          <a class="nav-link text-warning fw-bold" href="?page=logout">Logout</a>
         </li>
         <?php else: ?>
         <li class="nav-item">
