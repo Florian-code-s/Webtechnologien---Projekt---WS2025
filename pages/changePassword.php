@@ -1,12 +1,45 @@
 <?php
 $error = "";
 
-function checkCredentials($username, $password)
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+
+function checkCredentials($conn, $username, $password)
 {
-    if (strcmp($username, "User") == 0 && strcmp($password, "123") == 0) {
+    $sql = "SELECT salt, password_hash FROM `user` WHERE `username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows !== 1) {
+        return false;
+    }
+
+    $row = $result->fetch_row();
+    $stmt->close();
+    $salt = $row[0];
+    $passwordHashFromDB = $row[1];
+
+    $hashedPassword = hashPassword($password, $salt);
+
+    if (strcmp($passwordHashFromDB, $hashedPassword) == 0) {
         return true;
     }
     return false;
+}
+
+function updatePassword($conn, $username, $password)
+{
+    $salt = getRandomString(20);
+    $hashedPassword = hashPassword($password, $salt);
+
+    $sql = "UPDATE `user` SET `salt` = ?, `password_hash` = ? WHERE `username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $salt, $hashedPassword, $username);
+    $stmt->execute();
+
+    $stmt->close();
 }
 
 if (!$IsLoggedIn) {
@@ -14,18 +47,20 @@ if (!$IsLoggedIn) {
 }
 
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
+    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     $safeCurrentPassword = htmlspecialchars($_POST["current-password"], ENT_QUOTES, 'UTF-8');
     $safeNewPassword = htmlspecialchars($_POST["new-password"], ENT_QUOTES, 'UTF-8');
-    if (!checkCredentials($_SESSION["user"], $safeCurrentPassword)) {
+    if (!checkCredentials($conn, $_SESSION["user"], $safeCurrentPassword)) {
         $error = "Passwort nicht korrekt";
     }
     if (strcmp($_POST["new-password"], $_POST["confirm-password"]) !== 0) {
         $error = "Passwörter stimmen nicht überein";
     }
     if (strcmp($error, "") === 0) {
-        //To Do: save password for user in DB
+        updatePassword($conn, $_SESSION["user"], $safeNewPassword);
         header("Location: ./?page=profile");
     }
+    $conn->close();
 }
 ?>
 
