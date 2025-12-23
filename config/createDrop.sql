@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `image_path` varchar(200) NOT NULL,
   `salt` varchar(20) NOT NULL,
   `password_hash` varchar(64) NOT NULL,
+  `is_admin` BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_username` (`username`),
   UNIQUE KEY `unique_salt` (`salt`)
