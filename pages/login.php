@@ -17,6 +17,7 @@ function checkCredentials($conn, $username, $password)
     }
 
     $row = $result->fetch_row();
+    $stmt->close();
     $salt = $row[0];
     $passwordHashFromDB = $row[1];
 
@@ -33,11 +34,13 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
     $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     if (checkCredentials($conn, $safeUsername, $safePassword)) {
+        $conn->close();
         $_SESSION["user"] = $safeUsername;
         $_SESSION["logged_in"] = true;
         header("Location: ?page=home");
         exit;
     } else {
+        $conn->close();
         $error = "Login nicht erfolgreich";
     }
 }

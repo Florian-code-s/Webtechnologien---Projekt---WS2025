@@ -72,7 +72,9 @@ function userExists($conn, $safeUsername)
     $stmt->execute();
     $result = $stmt->get_result();
 
-    return $result->fetch_row()[0];
+    $count = $result->fetch_row()[0];
+    $stmt->close();
+    return $count;
 }
 
 if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"] && $_POST["confirm-password"] && strcmp($_POST["password"], $_POST["confirm-password"]) === 0) {

@@ -1,8 +1,11 @@
 <?php
 
+require_once __DIR__ . '/../config/database.php';
+
 $username = "";
 $email = "";
 $imageData = "";
+$imagePath = "";
 
 function checkMagicNumbers($fileName)
 {
@@ -52,28 +55,51 @@ function ensureDirectoryExists($path)
     }
 }
 
-function fillUserDetails()
+function fillUserDetails($conn)
 {
     global $username;
     global $email;
     global $imageData;
-    //To do: read user details from DB
-    $username = "User";
-    $email = "User@myemail.com";
+    global $imagePath;
+    $sql = "SELECT username, email, image_path FROM `user` WHERE `username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $_SESSION["user"]);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows !== 1) {
+        return false;
+    }
+
+    $row = $result->fetch_row();
+    $stmt->close();
+    $username = $row[0];
+    $email = $row[1];
+    $imagePath = $row[2];
     //load user profile image if exists, otherwise show default image
-    if (file_exists("../uploads/" . $_SESSION["user"] . ".img")) {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../uploads/" . $_SESSION["user"] . ".img"));
+    if (file_exists($imagePath)) {
+        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents($imagePath));
     } else {
         $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../public/images/user_default.png"));
     }
+}
+
+function updateUser($conn, $username, $email, $imagePath)
+{
+    $sql = "UPDATE `user` SET `email` = ?, `image_path` = ? WHERE `username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sss", $email, $imagePath, $username);
+    $stmt->execute();
+    $stmt->close();
 }
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
 }
 
-
+$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 if (!empty($_POST) && $_POST["email"]) {
+    $imagePath = "../uploads/" . $_SESSION["user"] . ".img";
     $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
@@ -82,16 +108,15 @@ if (!empty($_POST) && $_POST["email"]) {
             return;
         }
         ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], "../uploads/" . $_SESSION["user"] . ".img");
-        //echo realpath("../uploads/" . $safeUsername . getFileSuffix($picture["name"]));
+        move_uploaded_file($picture["tmp_name"], $imagePath);
     } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists("../uploads/" . $_SESSION["user"] . ".img")) {
         unlink("../uploads/" . $_SESSION["user"] . ".img");
+        $imagePath = "";
     }
-    //To Do: save user in DB
-    //header("Location: ./?page=profile");
-
+    updateUser($conn, $_SESSION["user"], $_POST["email"], $imagePath);
 }
-fillUserDetails();
+fillUserDetails($conn);
+$conn->close();
 ?>
 
 <section class="container my-5 profile">
