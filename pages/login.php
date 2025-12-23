@@ -13,6 +13,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
         $_SESSION["user"] = $username;
         $_SESSION["logged_in"] = true;
         $_SESSION["is_admin"] = $credCheck[1];
+        session_regenerate_id();
         header("Location: ?page=home");
     } else {
         $_SESSION["user"] = null;
