@@ -1,5 +1,8 @@
 <?php
 
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+
 function checkMagicNumbers($fileName)
 {
     $acceptedMagicNumbers = ["89504E47", "FFD8FFDB", "FFD8FFE0", "FFD8FFEE", "FFD8FFE1", "47494638"];
@@ -48,10 +51,35 @@ function ensureDirectoryExists($path)
     }
 }
 
+function saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash)
+{
+    $sql = "INSERT INTO `user` (`username`, `email`, `image_path`, `salt`, `password_hash`)
+        VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt-> bind_param("sssss", $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash);
+    $result = $stmt->execute();
+
+    $stmt->close(); 
+    $conn->close();
+    return $result;
+}
+
+function userExists($conn, $safeUsername)
+{
+    $sql = "SELECT count(*) FROM `user` WHERE `username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt-> bind_param("s", $safeUsername);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    return $result->fetch_row()[0];
+}
+
 if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"] && $_POST["confirm-password"] && strcmp($_POST["password"], $_POST["confirm-password"]) === 0) {
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+    $imagePath = "";
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
         if (!validateFile($picture)) {
@@ -59,10 +87,23 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
             return;
         }
         ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], "../uploads/" . $safeUsername . ".img");
-        //echo realpath("../uploads/" . $safeUsername . getFileSuffix($picture["name"]));
+        $imagePath = "../uploads/" . $safeUsername . ".img";
+        move_uploaded_file($picture["tmp_name"], $imagePath);
     }
-    //To Do: save user in DB
+    
+    $salt = getRandomString(20);
+    $hashedPassword = hashPassword($safePassword, $salt);
+    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+    if (userExists($conn, $safeUsername) === 1) {
+        echo "Benutzer konnte nicht gespeichert werden";
+        return;
+    }
+    $result = saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $hashedPassword);
+    if ($result === false) {
+        echo "Benutzer konnte nicht gespeichert werden";
+        return;
+    }
+
     header("Location: ./?page=login");
 }
 ?>
