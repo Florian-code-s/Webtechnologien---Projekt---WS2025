@@ -70,14 +70,16 @@ body {
 
 .register__button,
 .changePassword__button,
-.profile__button {
+.profile__button,
+.editor__button {
     background-color: #3B82F6;
     border: none;
 }
 
 .register__button:hover,
 .changePassword__button:hover,
-.profile__button:hover {
+.profile__button:hover, 
+.editor__button:hover {
     background-color: #FACC15;
     color: #1E293B;
 }
