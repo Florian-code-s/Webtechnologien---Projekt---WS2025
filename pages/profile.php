@@ -61,7 +61,7 @@ function fillUserDetails($conn)
     global $email;
     global $imageData;
     global $imagePath;
-    $sql = "SELECT username, email, image_path FROM `user` WHERE `username` = ?";
+    $sql = "SELECT username, email, image_path FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $_SESSION["user"]);
     $stmt->execute();
@@ -86,7 +86,7 @@ function fillUserDetails($conn)
 
 function updateUser($conn, $username, $email, $imagePath)
 {
-    $sql = "UPDATE `user` SET `email` = ?, `image_path` = ? WHERE `username` = ?";
+    $sql = "UPDATE `users` SET `email` = ?, `image_path` = ? WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sss", $email, $imagePath, $username);
     $stmt->execute();

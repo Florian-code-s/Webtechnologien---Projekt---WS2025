@@ -53,7 +53,7 @@ function ensureDirectoryExists($path)
 
 function saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash)
 {
-    $sql = "INSERT INTO `user` (`username`, `email`, `image_path`, `salt`, `password_hash`)
+    $sql = "INSERT INTO `users` (`username`, `email`, `image_path`, `salt`, `password_hash`)
         VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("sssss", $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash);
@@ -66,7 +66,7 @@ function saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $password
 
 function userExists($conn, $safeUsername)
 {
-    $sql = "SELECT count(*) FROM `user` WHERE `username` = ?";
+    $sql = "SELECT count(*) FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("s", $safeUsername);
     $stmt->execute();
