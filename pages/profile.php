@@ -57,18 +57,14 @@ function ensureDirectoryExists($path)
 
 function fillUserDetails($conn)
 {
-    global $username;
-    global $email;
-    global $imageData;
-    global $imagePath;
-    $sql = "SELECT username, email, image_path FROM `users` WHERE `username` = ?";
+    $sql = "SELECT `username`, `email`, `image_path` FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $_SESSION["user"]);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows !== 1) {
-        return false;
+        return null;
     }
 
     $row = $result->fetch_row();
@@ -82,6 +78,7 @@ function fillUserDetails($conn)
     } else {
         $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../public/images/user_default.png"));
     }
+    return [$username, $email, $imageData, $imagePath];
 }
 
 function updateUser($conn, $username, $email, $imagePath)
@@ -115,7 +112,15 @@ if (!empty($_POST) && $_POST["email"]) {
     }
     updateUser($conn, $_SESSION["user"], $_POST["email"], $imagePath);
 }
-fillUserDetails($conn);
+
+$userDetails = fillUserDetails($conn);
+if ($userDetails != null) {
+    $username = $userDetails[0];
+    $email = $userDetails[1];
+    $imageData = $userDetails[2];
+    $imagePath = $userDetails[3];
+}
+
 $conn->close();
 ?>
 

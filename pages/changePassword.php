@@ -6,7 +6,7 @@ require_once __DIR__ . "/../functions/helpers.php";
 
 function checkCredentials($conn, $username, $password)
 {
-    $sql = "SELECT salt, password_hash FROM `users` WHERE `username` = ?";
+    $sql = "SELECT `salt`, `password_hash` FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
     $stmt->execute();

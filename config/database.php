@@ -1,4 +1,9 @@
 <?php
+/*
+Einstellungen zu Fehlerhandling: 
+REPORT_ERROR: gibt MySQL-Fehler detailliert aus
+REPORT_STRICT: wandelt MySQL-Fehler in Exceptions um
+*/
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $DB_HOST = 'localhost';

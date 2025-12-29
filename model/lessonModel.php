@@ -2,7 +2,7 @@
 
 function getLessons($conn)
 {
-    $sql = "SELECT id, title, description FROM `lessons`";
+    $sql = "SELECT `id`, `title`, `description` FROM `lessons`";
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -18,7 +18,7 @@ function getLessons($conn)
 
 function getLesson($conn, $id)
 {
-    $sql = "SELECT id, title, description FROM `lessons` WHERE id = ?";
+    $sql = "SELECT `id`, `title`, `description` FROM `lessons` WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
     $stmt->execute();
@@ -29,7 +29,7 @@ function getLesson($conn, $id)
 
 function modifyLesson($conn, $id, $title, $description)
 {
-    $sql = "UPDATE lessons SET title = ?, description = ? WHERE id = ?";
+    $sql = "UPDATE `lessons` SET `title` = ?, `description` = ? WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("ssi", $title, $description, $id);
     $result = $stmt->execute();

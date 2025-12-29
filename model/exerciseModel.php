@@ -2,7 +2,7 @@
 
 function getExercises($conn, $lessonId)
 {
-    $sql = "SELECT id, title, description, box_style, info_text, hint_link, fk_id_lessons FROM `exercises` WHERE fk_id_lessons = ?";
+    $sql = "SELECT `id`, `title`, `description`, `box_style`, `info_text`, `hint_link`, `fk_id_lessons` FROM `exercises` WHERE `fk_id_lessons` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $lessonId);
     $stmt->execute();
@@ -19,7 +19,7 @@ function getExercises($conn, $lessonId)
 
 function getExercise($conn, $id)
 {
-    $sql = "SELECT id, title, description, box_style, info_text, hint_link, fk_id_lessons FROM `exercises`  WHERE id = ?";
+    $sql = "SELECT `id`, `title`, `description`, `box_style`, `info_text`, `hint_link`, `fk_id_lessons` FROM `exercises`  WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
     $stmt->execute();
@@ -30,7 +30,7 @@ function getExercise($conn, $id)
 
 function modifyExercise($conn, $id, $title, $description, $boxStyle, $infoText, $hintLink)
 {
-    $sql = "UPDATE exercises SET title = ?, description = ?, box_style = ?, info_text = ?, hint_link = ? WHERE id = ?";
+    $sql = "UPDATE `exercises` SET `title` = ?, `description` = ?, `box_style` = ?, `info_text` = ?, `hint_link` = ? WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("sssssi", $title, $description, $boxStyle, $infoText, $hintLink, $id);
     $result = $stmt->execute();
