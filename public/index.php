@@ -22,6 +22,8 @@ $page = $_GET['page'] ?? 'home';
 
 
 $allowedPages = ['home', 'about', 'login', 'register', 'logout', 'finishedLessons', 'finishedLessonsDiagram', 'lessons', 'lesson_bg_color', 'lesson_edit', 'changePassword', 'profile', 'wiki', 'wiki_selectors', 'wiki_box_model', 'wiki_flexbox', 'wiki_typography'];
+$adminPages = ['lessonsEditor', 'lessonDetailEditor', 'exerciseDetailEditor'];
+
 
 if (!in_array($page, $allowedPages)) {
     $page = 'home';
