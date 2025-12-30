@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `exercises` (
   `box_style` varchar(255) NOT NULL,
   `info_text` varchar(1000) NOT NULL,
   `hint_link` varchar(255) NOT NULL,
+  `correct_answer` varchar(255) NOT NULL,
   `fk_id_lessons` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_id_lessons` (`fk_id_lessons`)

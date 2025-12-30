@@ -9,27 +9,29 @@ $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 $lesson = [];
 $exercises = [];
 
-if (isset($_GET["id"])) {
-    // Löschen von Lesson
-    if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
-        deleteLesson($conn, $_GET["id"]);
-        header("Location: ?page=lessonsEditor");
-    }
-
-    // Erstellen oder Bearbeiten von Lesson
-    if (isset($_POST["title"]) && isset($_POST["description"])) {
-        if (strcmp($_GET["id"], "") === 0) {
-            createLesson($conn, $_POST["title"], $_POST["description"]);
-        } else {
-            modifyLesson($conn, $_GET["id"], $_POST["title"], $_POST["description"]);
-        }
-        header("Location: ?page=lessonsEditor");
-    }
-
-    // Laden von Lesson und Aufgaben
-    $lesson = getLesson($conn, $_GET["id"]);
-    $exercises = getExercises($conn, $_GET["id"]);
+if (!isset($_GET["id"])) {
+    header("Location: ?page=home");
 }
+
+// Löschen von Lesson
+if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
+    deleteLesson($conn, $_GET["id"]);
+    header("Location: ?page=lessonsEditor");
+}
+
+// Erstellen oder Bearbeiten von Lesson
+if (isset($_POST["title"]) && isset($_POST["description"])) {
+    if (strcmp($_GET["id"], "") === 0) {
+        createLesson($conn, $_POST["title"], $_POST["description"]);
+    } else {
+        modifyLesson($conn, $_GET["id"], $_POST["title"], $_POST["description"]);
+    }
+    header("Location: ?page=lessonsEditor");
+}
+
+// Laden von Lesson und Aufgaben
+$lesson = getLesson($conn, $_GET["id"]);
+$exercises = getExercises($conn, $_GET["id"]);
 
 $conn->close();
 ?>
@@ -55,7 +57,7 @@ $conn->close();
                 </div>
                 <div class="col-12 d-flex justify-content-end gap-2 mb-3">
                     <button type="submit" class="btn btn-primary editor__button">Speichern</button>
-                    <?php if (isset($_GET["id"])): ?> <a
+                    <?php if (strcmp($_GET["id"], "") !== 0): ?> <a
                             href="./?page=lessonDetailEditor&delete=1&id=<?php echo $lesson["id"]; ?>"
                             class="btn btn-danger">Löschen</a>
                     <?php endif; ?>
@@ -63,29 +65,35 @@ $conn->close();
             </form>
         </div>
 
-        <table class="table table-responsive align-middle">
-            <thead>
-                <tr>
-                    <th scope="col" class="w-25">Aufgabentitel</th>
-                    <th scope="col" class="w-50">Aufgabenbeschreibung</th>
-                    <th scope="col" class="w-25"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($exercises as $exercise): ?>
+        <?php if (strcmp($_GET["id"], "") === 0): ?>
+            <h5>Aufgaben können nach Erstellen der Lesson hinzugefügt werden</h5>
+        <?php else: ?>
+            <table class="table table-responsive align-middle">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($exercise["title"]); ?></th>
-                        <td><?php echo htmlspecialchars($exercise["description"]); ?></th>
-                        <td class="text-end"><a href="./?page=exerciseDetailEditor&id=<?php echo $exercise["id"]; ?>"
-                                class="btn btn-sm btn-primary">Bearbeiten</a></td>
+                        <th scope="col" class="w-25">Aufgabentitel</th>
+                        <th scope="col" class="w-50">Aufgabenbeschreibung</th>
+                        <th scope="col" class="w-25"></th>
                     </tr>
-                <?php endforeach ?>
-                <tr>
-                    <td><a href="./?page=exerciseDetailEditor" class="btn btn-sm btn-primary">Neue Aufgabe erstellen</a>
-                    </td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($exercises as $exercise): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($exercise["title"]); ?></th>
+                            <td><?php echo htmlspecialchars($exercise["description"]); ?></th>
+                            <td class="text-end"><a
+                                    href="./?page=exerciseDetailEditor&lessonId=<?php echo $lesson["id"]; ?>&id=<?php echo $exercise["id"]; ?>"
+                                    class="btn btn-sm btn-primary">Bearbeiten</a></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tr>
+                        <td><a href="./?page=exerciseDetailEditor&lessonId=<?php echo $lesson["id"]; ?>&id="
+                                class="btn btn-sm btn-primary">Neue Aufgabe erstellen</a>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        <?php endif; ?>
     </div>
 </section>

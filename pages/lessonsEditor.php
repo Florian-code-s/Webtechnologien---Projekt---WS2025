@@ -29,7 +29,7 @@ $conn->close();
                     </tr>
                 <?php endforeach ?>
                 <tr>
-                    <td><a href="./?page=lessonDetailEditor" class="btn btn-sm btn-primary">Neue Lesson erstellen</a>
+                    <td><a href="./?page=lessonDetailEditor&id=" class="btn btn-sm btn-primary">Neue Lesson erstellen</a>
                     </td>
                     <td></td>
                 </tr>
