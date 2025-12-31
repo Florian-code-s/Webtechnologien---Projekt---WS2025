@@ -4,13 +4,12 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/lessonModel.php';
 require_once __DIR__ . '/../model/exerciseModel.php';
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-
 $lesson = [];
 $exercises = [];
 
 if (!isset($_GET["id"])) {
     header("Location: ?page=home");
+    $conn->close();
     exit();
 }
 
@@ -18,6 +17,7 @@ if (!isset($_GET["id"])) {
 if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
     deleteLesson($conn, htmlspecialchars($_GET["id"]));
     header("Location: ?page=lessonsEditor");
+    $conn->close();
     exit();
 }
 
@@ -29,6 +29,7 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
         modifyLesson($conn, htmlspecialchars($_GET["id"]), htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]));
     }
     header("Location: ?page=lessonsEditor");
+    $conn->close();
     exit();
 }
 

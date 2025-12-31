@@ -32,23 +32,20 @@ function checkCredentials($conn, $username, $password)
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     $credCheck = checkCredentials($conn, $safeUsername, $safePassword);
     if ($credCheck[0]) {
-        $conn->close();
         $_SESSION["user"] = $safeUsername;
         $_SESSION["logged_in"] = true;
         $_SESSION["is_admin"] = $credCheck[1];
         header("Location: ?page=home");
-        exit;
     } else {
-        $conn->close();
         $_SESSION["user"] = null;
         $_SESSION["logged_in"] = false;
         $_SESSION["is_admin"] = false;
         $error = "Login nicht erfolgreich";
     }
 }
+$conn->close();
 ?>
 
 <section class="login">

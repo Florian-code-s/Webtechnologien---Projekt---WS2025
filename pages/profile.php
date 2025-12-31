@@ -92,10 +92,10 @@ function updateUser($conn, $username, $email, $imagePath)
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    $conn->close();
     exit();
 }
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 if (!empty($_POST) && $_POST["email"]) {
     $imagePath = "../uploads/" . $_SESSION["user"] . ".img";
     $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');

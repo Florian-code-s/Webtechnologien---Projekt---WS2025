@@ -44,11 +44,11 @@ function updatePassword($conn, $username, $password)
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    $conn->close();
     exit();
 }
 
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     $safeCurrentPassword = htmlspecialchars($_POST["current-password"], ENT_QUOTES, 'UTF-8');
     $safeNewPassword = htmlspecialchars($_POST["new-password"], ENT_QUOTES, 'UTF-8');
     if (!checkCredentials($conn, $_SESSION["user"], $safeCurrentPassword)) {
@@ -60,10 +60,11 @@ if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_
     if (strcmp($error, "") === 0) {
         updatePassword($conn, $_SESSION["user"], $safeNewPassword);
         header("Location: ./?page=profile");
+        $conn->close();
         exit();
     }
-    $conn->close();
 }
+$conn->close();
 ?>
 
 <section class="container my-5 changePassword">

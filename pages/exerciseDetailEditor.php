@@ -3,12 +3,11 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/exerciseModel.php';
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-
 $exercise = [];
 
 if (!isset($_GET["id"]) || !isset($_GET["lessonId"])) {
     header("Location: ?page=home");
+    $conn->close();
     exit();
 }
 
@@ -16,6 +15,7 @@ if (!isset($_GET["id"]) || !isset($_GET["lessonId"])) {
 if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
     deleteExercise($conn, htmlspecialchars($_GET["id"]));
     header("Location: ?page=lessonDetailEditor&id=" . htmlspecialchars($_GET["lessonId"]));
+    $conn->close();
     exit();
 }
 
@@ -27,6 +27,7 @@ if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["boxH
         modifyExercise($conn, htmlspecialchars($_GET["id"]), htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]), $_POST["boxHtml"], htmlspecialchars($_POST["infoText"]), $_POST["hintLink"], $_POST["correctAnswer"]);
     }
     header("Location: ?page=lessonDetailEditor&id=" . htmlspecialchars($_GET["lessonId"]));
+    $conn->close();
     exit();
 }
 

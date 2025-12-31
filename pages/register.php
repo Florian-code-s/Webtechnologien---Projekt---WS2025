@@ -60,7 +60,6 @@ function saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $password
     $result = $stmt->execute();
 
     $stmt->close(); 
-    $conn->close();
     return $result;
 }
 
@@ -95,7 +94,6 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
     
     $salt = getRandomString(20);
     $hashedPassword = hashPassword($safePassword, $salt);
-    $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
     if (userExists($conn, $safeUsername) === 1) {
         echo "Benutzer konnte nicht gespeichert werden";
         return;
@@ -107,8 +105,10 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
     }
 
     header("Location: ./?page=login");
+    $conn->close();
     exit();
 }
+$conn->close();
 ?>
 
 <section class="register">

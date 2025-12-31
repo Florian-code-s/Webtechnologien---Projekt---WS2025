@@ -3,8 +3,6 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/lessonModel.php';
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-
 $lessons = getLessons($conn);
 
 $conn->close();
