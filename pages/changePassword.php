@@ -3,44 +3,7 @@ $error = "";
 
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . "/../functions/helpers.php";
-
-function checkCredentials($conn, $username, $password)
-{
-    $sql = "SELECT `salt`, `password_hash` FROM `users` WHERE `username` = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows !== 1) {
-        return false;
-    }
-
-    $row = $result->fetch_row();
-    $stmt->close();
-    $salt = $row[0];
-    $passwordHashFromDB = $row[1];
-
-    $hashedPassword = hashPassword($password, $salt);
-
-    if (strcmp($passwordHashFromDB, $hashedPassword) == 0) {
-        return true;
-    }
-    return false;
-}
-
-function updatePassword($conn, $username, $password)
-{
-    $salt = getRandomString(20);
-    $hashedPassword = hashPassword($password, $salt);
-
-    $sql = "UPDATE `users` SET `salt` = ?, `password_hash` = ? WHERE `username` = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $salt, $hashedPassword, $username);
-    $stmt->execute();
-
-    $stmt->close();
-}
+require_once __DIR__ . "/../model/userModel.php";
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
@@ -51,7 +14,7 @@ if (!$IsLoggedIn) {
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
     $safeCurrentPassword = htmlspecialchars($_POST["current-password"], ENT_QUOTES, 'UTF-8');
     $safeNewPassword = htmlspecialchars($_POST["new-password"], ENT_QUOTES, 'UTF-8');
-    if (!checkCredentials($conn, $_SESSION["user"], $safeCurrentPassword)) {
+    if (!checkCredentials($conn, $_SESSION["user"], $safeCurrentPassword)[0]) {
         $error = "Passwort nicht korrekt";
     }
     if (strcmp($_POST["new-password"], $_POST["confirm-password"]) !== 0) {

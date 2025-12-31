@@ -1,94 +1,13 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+require_once __DIR__ . "/../model/userModel.php";
 
 $username = "";
 $email = "";
 $imageData = "";
 $imagePath = "";
-
-function checkMagicNumbers($fileName)
-{
-    $acceptedMagicNumbers = ["89504E47", "FFD8FFDB", "FFD8FFE0", "FFD8FFEE", "FFD8FFE1", "47494638"];
-    $f = fopen($fileName, "r");
-    $magicNumber = fread($f, 4);
-    fclose($f);
-    if (in_array(strtoupper(substr(bin2hex($magicNumber), 0, 8)), $acceptedMagicNumbers)) {
-        return true;
-    }
-    return false;
-}
-
-function getFileSuffix($fileName)
-{
-    $pos = strrpos($fileName, ".");
-    $suffix = substr($fileName, $pos + 1);
-    return $suffix;
-}
-
-function checkSuffix($fileName)
-{
-    $acceptedSuffixes = ["png", "jpg", "gif"];
-    $suffix = getFileSuffix($fileName);
-    if (in_array($suffix, $acceptedSuffixes)) {
-        return true;
-    }
-    return false;
-}
-
-function validateFile($file)
-{
-    $maxFileSize = 5000000;
-    $validMagicNumber = checkMagicNumbers($file["tmp_name"]);
-    $validFileSize = ($file["size"] <= $maxFileSize);
-    $validSuffix = checkSuffix($file["name"]);
-    if ($validMagicNumber && $validFileSize && $validSuffix) {
-        return true;
-    }
-    return false;
-}
-
-function ensureDirectoryExists($path)
-{
-    if (!is_dir($path)) {
-        mkdir($path);
-    }
-}
-
-function fillUserDetails($conn)
-{
-    $sql = "SELECT `username`, `email`, `image_path` FROM `users` WHERE `username` = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $_SESSION["user"]);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows !== 1) {
-        return null;
-    }
-
-    $row = $result->fetch_row();
-    $stmt->close();
-    $username = $row[0];
-    $email = $row[1];
-    $imagePath = $row[2];
-    //load user profile image if exists, otherwise show default image
-    if (file_exists($imagePath)) {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents($imagePath));
-    } else {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../public/images/user_default.png"));
-    }
-    return [$username, $email, $imageData, $imagePath];
-}
-
-function updateUser($conn, $username, $email, $imagePath)
-{
-    $sql = "UPDATE `users` SET `email` = ?, `image_path` = ? WHERE `username` = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $email, $imagePath, $username);
-    $stmt->execute();
-    $stmt->close();
-}
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
@@ -114,7 +33,7 @@ if (!empty($_POST) && $_POST["email"]) {
     updateUser($conn, $_SESSION["user"], $_POST["email"], $imagePath);
 }
 
-$userDetails = fillUserDetails($conn);
+$userDetails = getUserDetails($conn);
 if ($userDetails != null) {
     $username = $userDetails[0];
     $email = $userDetails[1];

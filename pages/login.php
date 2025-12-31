@@ -1,33 +1,9 @@
 <?php
 
 require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . "/../functions/helpers.php";
+require_once __DIR__ . "/../model/userModel.php";
+
 $error = "";
-
-function checkCredentials($conn, $username, $password)
-{
-    $sql = "SELECT `salt`, `password_hash`, `is_admin` FROM `users` WHERE `username` = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows !== 1) {
-        return [false, false];
-    }
-
-    $row = $result->fetch_row();
-    $stmt->close();
-    $salt = $row[0];
-    $passwordHashFromDB = $row[1];
-
-    $hashedPassword = hashPassword($password, $salt);
-
-    if (strcmp($passwordHashFromDB, $hashedPassword) == 0) {
-        return [true, $row[2]];
-    }
-    return [false, false];
-}
 
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
