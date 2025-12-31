@@ -107,6 +107,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
     }
 
     header("Location: ./?page=login");
+    exit();
 }
 ?>
 

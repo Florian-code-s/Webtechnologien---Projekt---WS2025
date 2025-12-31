@@ -34,12 +34,12 @@ CREATE TABLE IF NOT EXISTS `lessons` (
 CREATE TABLE IF NOT EXISTS `exercises` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `box_style` varchar(255) NOT NULL,
+  `description` varchar(1000) NOT NULL,
+  `box_html` varchar(1000) NOT NULL,
   `info_text` varchar(1000) NOT NULL,
-  `hint_link` varchar(255) NOT NULL,
+  `hint_link` varchar(255) NULL,
   `correct_answer` varchar(255) NOT NULL,
   `fk_id_lessons` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_id_lessons` (`fk_id_lessons`)
+  FOREIGN KEY (`fk_id_lessons`) REFERENCES `lessons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

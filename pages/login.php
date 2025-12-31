@@ -43,6 +43,9 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
         exit;
     } else {
         $conn->close();
+        $_SESSION["user"] = null;
+        $_SESSION["logged_in"] = false;
+        $_SESSION["is_admin"] = false;
         $error = "Login nicht erfolgreich";
     }
 }

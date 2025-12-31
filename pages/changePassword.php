@@ -44,6 +44,7 @@ function updatePassword($conn, $username, $password)
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    exit();
 }
 
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
@@ -59,6 +60,7 @@ if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_
     if (strcmp($error, "") === 0) {
         updatePassword($conn, $_SESSION["user"], $safeNewPassword);
         header("Location: ./?page=profile");
+        exit();
     }
     $conn->close();
 }

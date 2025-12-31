@@ -11,27 +11,30 @@ $exercises = [];
 
 if (!isset($_GET["id"])) {
     header("Location: ?page=home");
+    exit();
 }
 
 // Löschen von Lesson
 if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
-    deleteLesson($conn, $_GET["id"]);
+    deleteLesson($conn, htmlspecialchars($_GET["id"]));
     header("Location: ?page=lessonsEditor");
+    exit();
 }
 
 // Erstellen oder Bearbeiten von Lesson
 if (isset($_POST["title"]) && isset($_POST["description"])) {
     if (strcmp($_GET["id"], "") === 0) {
-        createLesson($conn, $_POST["title"], $_POST["description"]);
+        createLesson($conn, htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]));
     } else {
-        modifyLesson($conn, $_GET["id"], $_POST["title"], $_POST["description"]);
+        modifyLesson($conn, htmlspecialchars($_GET["id"]), htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]));
     }
     header("Location: ?page=lessonsEditor");
+    exit();
 }
 
 // Laden von Lesson und Aufgaben
-$lesson = getLesson($conn, $_GET["id"]);
-$exercises = getExercises($conn, $_GET["id"]);
+$lesson = getLesson($conn, htmlspecialchars($_GET["id"]));
+$exercises = getExercises($conn, htmlspecialchars($_GET["id"]));
 
 $conn->close();
 ?>
@@ -44,15 +47,14 @@ $conn->close();
                 method="POST">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="title" name="title" placeholder="Titel"
-                        value="<?php echo isset($lesson["title"]) && $lesson["title"] ? $lesson["title"] : ''; ?>"
-                        required>
+                        value="<?php echo isset($lesson["title"]) && $lesson["title"] ? htmlspecialchars($lesson["title"]) : ''; ?>"
+                        maxlength="100" required>
                     <label for="title">Titel</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="description" name="description"
-                        placeholder="Beschreibung"
-                        value="<?php echo isset($lesson["description"]) && $lesson["description"] ? $lesson["description"] : ''; ?>"
-                        required>
+                    <textarea class="form-control" id="description" name="description" placeholder="Beschreibung"
+                        maxlength="1000" required
+                        rows="3"><?php echo isset($lesson["description"]) && $lesson["description"] ? htmlspecialchars($lesson["description"]) : ''; ?></textarea>
                     <label for="description">Beschreibung</label>
                 </div>
                 <div class="col-12 d-flex justify-content-end gap-2 mb-3">
@@ -68,7 +70,7 @@ $conn->close();
         <?php if (strcmp($_GET["id"], "") === 0): ?>
             <h5>Aufgaben können nach Erstellen der Lesson hinzugefügt werden</h5>
         <?php else: ?>
-            <table class="table table-responsive align-middle">
+            <table class="table table-responsive align-middle text-break">
                 <thead>
                     <tr>
                         <th scope="col" class="w-25">Aufgabentitel</th>

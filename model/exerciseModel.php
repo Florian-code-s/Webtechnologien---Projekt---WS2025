@@ -2,7 +2,7 @@
 
 function getExercises($conn, $lessonId)
 {
-    $sql = "SELECT `id`, `title`, `description`, `box_style`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises` WHERE `fk_id_lessons` = ?";
+    $sql = "SELECT `id`, `title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises` WHERE `fk_id_lessons` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $lessonId);
     $stmt->execute();
@@ -19,7 +19,7 @@ function getExercises($conn, $lessonId)
 
 function getExercise($conn, $id)
 {
-    $sql = "SELECT `id`, `title`, `description`, `box_style`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises`  WHERE `id` = ?";
+    $sql = "SELECT `id`, `title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises`  WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
     $stmt->execute();
@@ -28,22 +28,22 @@ function getExercise($conn, $id)
     return $result->fetch_array();
 }
 
-function modifyExercise($conn, $id, $title, $description, $boxStyle, $infoText, $hintLink, $correctAnswer)
+function modifyExercise($conn, $id, $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer)
 {
-    $sql = "UPDATE `exercises` SET `title` = ?, `description` = ?, `box_style` = ?, `info_text` = ?, `hint_link` = ?, `correct_answer` = ? WHERE `id` = ?";
+    $sql = "UPDATE `exercises` SET `title` = ?, `description` = ?, `box_html` = ?, `info_text` = ?, `hint_link` = ?, `correct_answer` = ? WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
-    $stmt-> bind_param("ssssssi", $title, $description, $boxStyle, $infoText, $hintLink, $correctAnswer, $id);
+    $stmt-> bind_param("ssssssi", $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer, $id);
     $result = $stmt->execute();
     $stmt->close(); 
     return $result;
 }
 
-function createExercise($conn, $title, $description, $boxStyle, $infoText, $hintLink, $correctAnswer, $lessonId)
+function createExercise($conn, $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer, $lessonId)
 {
-    $sql = "INSERT INTO `exercises` (`title`, `description`, `box_style`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons`)
+    $sql = "INSERT INTO `exercises` (`title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons`)
         VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt-> bind_param("ssssssi", $title, $description, $boxStyle, $infoText, $hintLink, $correctAnswer, $lessonId);
+    $stmt-> bind_param("ssssssi", $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer, $lessonId);
     $result = $stmt->execute();
     $stmt->close(); 
     return $result;
@@ -51,7 +51,7 @@ function createExercise($conn, $title, $description, $boxStyle, $infoText, $hint
 
 function deleteExercise($conn, $id)
 {
-    $sql = "DELETE FROM `exercises` WHERE `id` = ?;";
+    $sql = "DELETE FROM `exercises` WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
     $result = $stmt->execute();

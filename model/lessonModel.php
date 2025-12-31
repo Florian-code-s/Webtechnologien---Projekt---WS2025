@@ -50,19 +50,19 @@ function createLesson($conn, $title, $description)
 
 function deleteLesson($conn, $id)
 {
-    $sql = "DELETE FROM `exercises` WHERE `fk_id_lessons` = ?;";
+    $sql = "DELETE FROM `exercises` WHERE `fk_id_lessons` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
-    $result = $stmt->execute();
+    $result1 = $stmt->execute();
     $stmt->close(); 
 
-    $sql = "DELETE FROM `lessons` WHERE `id` = ?;";
+    $sql = "DELETE FROM `lessons` WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt-> bind_param("i", $id);
-    $result = $stmt->execute();
+    $result2 = $stmt->execute();
     $stmt->close(); 
 
-    return $result;
+    return $result1 && $result2;
 }
 
 ?>

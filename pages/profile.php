@@ -92,6 +92,7 @@ function updateUser($conn, $username, $email, $imagePath)
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    exit();
 }
 
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
