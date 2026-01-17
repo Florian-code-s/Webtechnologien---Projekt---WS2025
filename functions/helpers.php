@@ -20,17 +20,10 @@ function checkMagicNumbers($fileName)
     return false;
 }
 
-function getFileSuffix($fileName)
-{
-    $pos = strrpos($fileName, ".");
-    $suffix = substr($fileName, $pos + 1);
-    return $suffix;
-}
-
 function checkSuffix($fileName)
 {
     $acceptedSuffixes = ["png", "jpg", "gif"];
-    $suffix = getFileSuffix($fileName);
+    $suffix = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
     if (in_array($suffix, $acceptedSuffixes)) {
         return true;
     }

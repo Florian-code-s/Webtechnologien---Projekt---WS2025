@@ -16,18 +16,23 @@ if (!$IsLoggedIn) {
 }
 
 if (!empty($_POST) && $_POST["email"]) {
-    $imagePath = "../uploads/" . $_SESSION["user"] . ".img";
-    $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
+    $imagePath = getUserDetails($conn)[2];
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
+        $uploadDir = "../uploads/";
+        $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
+        $imagePath = $uploadDir . $_SESSION["user"] . "." . $uploadExt;
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
             return;
         }
-        ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], $imagePath);
-    } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists("../uploads/" . $_SESSION["user"] . ".img")) {
-        unlink("../uploads/" . $_SESSION["user"] . ".img");
+        ensureDirectoryExists($uploadDir);
+        if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
+            echo "Fehler beim Hochladen des Profilbildes!";
+            return;
+        }
+    } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists($imagePath)) {
+        unlink($imagePath);
         $imagePath = "";
     }
     updateUser($conn, $_SESSION["user"], $_POST["email"], $imagePath);
@@ -37,8 +42,7 @@ $userDetails = getUserDetails($conn);
 if ($userDetails != null) {
     $username = $userDetails[0];
     $email = $userDetails[1];
-    $imageData = $userDetails[2];
-    $imagePath = $userDetails[3];
+    $imagePath = $userDetails[2];
 }
 
 $conn->close();
@@ -61,7 +65,7 @@ $conn->close();
                 <a class="btn btn-primary" role="button" href="./?page=changePassword">Passwort ändern</a>
             </div>
             <div class="mb-3">
-                <?php echo '<img src="' . $imageData . '" class="profile__image" alt="Profilbild" />' ?>
+                <?php echo '<img src="' . $imagePath . '" class="profile__image" alt="Profilbild" />' ?>
             </div>
             <div class="mb-3 text-start form-check">
                 <input type="checkbox" class="form-check-input" id="deleteImage" name="deleteImage">

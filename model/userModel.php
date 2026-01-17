@@ -69,13 +69,11 @@ function getUserDetails($conn)
     $username = $row[0];
     $email = $row[1];
     $imagePath = $row[2];
-    //load user profile image if exists, otherwise show default image
-    if (file_exists($imagePath)) {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents($imagePath));
-    } else {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../public/images/user_default.png"));
+    //return user profile image if exists, otherwise return default image
+    if (empty($imagePath) || !file_exists($imagePath)) {
+        $imagePath = "../public/images/user_default.png";
     }
-    return [$username, $email, $imageData, $imagePath];
+    return [$username, $email, $imagePath];
 }
 
 function updateUser($conn, $username, $email, $imagePath)

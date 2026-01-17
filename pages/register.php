@@ -15,9 +15,14 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
             echo "Profilbild ungültig";
             return;
         }
-        ensureDirectoryExists("../uploads"); //To Do: set correct path
-        $imagePath = "../uploads/" . $safeUsername . ".img";
-        move_uploaded_file($picture["tmp_name"], $imagePath);
+        $uploadDir = "../uploads/";
+        ensureDirectoryExists($uploadDir);
+        $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
+        $imagePath = $uploadDir . $safeUsername . "." . $uploadExt;
+        if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
+            echo "Fehler beim Hochladen des Profilbildes!";
+            return;
+        }
     }
     
     $salt = getRandomString(20);
