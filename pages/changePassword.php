@@ -12,16 +12,16 @@ if (!$IsLoggedIn) {
 }
 
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
-    $safeCurrentPassword = htmlspecialchars($_POST["current-password"], ENT_QUOTES, 'UTF-8');
-    $safeNewPassword = htmlspecialchars($_POST["new-password"], ENT_QUOTES, 'UTF-8');
-    if (!checkCredentials($conn, $_SESSION["user"], $safeCurrentPassword)[0]) {
+    $currentPassword = $_POST["current-password"];
+    $newPassword = $_POST["new-password"];
+    if (!checkCredentials($conn, $_SESSION["user"], $currentPassword)[0]) {
         $error = "Passwort nicht korrekt";
     }
     if (strcmp($_POST["new-password"], $_POST["confirm-password"]) !== 0) {
         $error = "Passwörter stimmen nicht überein";
     }
     if (strcmp($error, "") === 0) {
-        updatePassword($conn, $_SESSION["user"], $safeNewPassword);
+        updatePassword($conn, $_SESSION["user"], $newPassword);
         header("Location: ./?page=profile");
         $conn->close();
         exit();

@@ -6,11 +6,11 @@ require_once __DIR__ . "/../model/userModel.php";
 $error = "";
 
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
-    $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
-    $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-    $credCheck = checkCredentials($conn, $safeUsername, $safePassword);
+    $username = trim($_POST["username"]);
+    $password = trim($_POST["password"]);
+    $credCheck = checkCredentials($conn, $username, $password);
     if ($credCheck[0]) {
-        $_SESSION["user"] = $safeUsername;
+        $_SESSION["user"] = $username;
         $_SESSION["logged_in"] = true;
         $_SESSION["is_admin"] = $credCheck[1];
         header("Location: ?page=home");

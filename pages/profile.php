@@ -16,12 +16,20 @@ if (!$IsLoggedIn) {
 }
 
 if (!empty($_POST) && $_POST["email"]) {
-    $imagePath = getUserDetails($conn)[2];
+    $ud = getUserDetails($conn);
+    if($ud === null) {
+        echo "Fehler beim Userupdate";
+        return;
+    }
+    $imagePath = $ud[2];
+
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
         $uploadDir = "../uploads/";
         $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
-        $imagePath = $uploadDir . $_SESSION["user"] . "." . $uploadExt;
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+        $imagePath = $uploadDir . $_SESSION["user"] .  "_". $timestamp . "." . $uploadExt;
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
             return;
@@ -35,13 +43,18 @@ if (!empty($_POST) && $_POST["email"]) {
         unlink($imagePath);
         $imagePath = "";
     }
-    updateUser($conn, $_SESSION["user"], $_POST["email"], $imagePath);
+    $email = trim($_POST["email"]);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Ungültige E-Mail-Adresse";
+        return;
+    }
+    updateUser($conn, $_SESSION["user"], $email, $imagePath);
 }
 
 $userDetails = getUserDetails($conn);
 if ($userDetails != null) {
-    $username = $userDetails[0];
-    $email = $userDetails[1];
+    $username = htmlspecialchars($userDetails[0]);
+    $email = htmlspecialchars($userDetails[1]);
     $imagePath = $userDetails[2];
 }
 

@@ -22,7 +22,7 @@ $conn->close();
                 <?php foreach ($lessons as $lesson): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($lesson["title"]); ?></td>
-                        <td class="text-end"><a href="./?page=lessonDetailEditor&id=<?php echo $lesson["id"]; ?>"
+                        <td class="text-end"><a href="./?page=lessonDetailEditor&id=<?php echo htmlspecialchars($lesson["id"]); ?>"
                                 class="btn btn-sm btn-primary">Bearbeiten</a></td>
                     </tr>
                 <?php endforeach ?>

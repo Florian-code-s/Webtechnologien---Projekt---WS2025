@@ -1,6 +1,6 @@
 <?php
 
-function getLessons($conn)
+function getLessons(mysqli $conn): array
 {
     $sql = "SELECT `id`, `title`, `description` FROM `lessons`";
     $stmt = $conn->prepare($sql);
@@ -16,7 +16,7 @@ function getLessons($conn)
     return $resultLessons;
 }
 
-function getLesson($conn, $id)
+function getLesson(mysqli $conn, string $id): array|bool|null
 {
     $sql = "SELECT `id`, `title`, `description` FROM `lessons` WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
@@ -27,7 +27,7 @@ function getLesson($conn, $id)
     return $result->fetch_array();
 }
 
-function modifyLesson($conn, $id, $title, $description)
+function modifyLesson(mysqli $conn, string $id, string $title, string $description): bool
 {
     $sql = "UPDATE `lessons` SET `title` = ?, `description` = ? WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
@@ -37,7 +37,7 @@ function modifyLesson($conn, $id, $title, $description)
     return $result;
 }
 
-function createLesson($conn, $title, $description)
+function createLesson(mysqli $conn, string $title, string $description): bool
 {
     $sql = "INSERT INTO `lessons` (`title`, `description`)
         VALUES (?, ?)";
@@ -48,7 +48,7 @@ function createLesson($conn, $title, $description)
     return $result;
 }
 
-function deleteLesson($conn, $id)
+function deleteLesson(mysqli $conn, string $id): bool
 {
     $sql = "DELETE FROM `exercises` WHERE `fk_id_lessons` = ?";
     $stmt = $conn->prepare($sql);

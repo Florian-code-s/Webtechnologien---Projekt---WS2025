@@ -15,7 +15,7 @@ if (!isset($_GET["id"])) {
 
 // Löschen von Lesson
 if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
-    deleteLesson($conn, htmlspecialchars($_GET["id"]));
+    deleteLesson($conn, $_GET["id"]);
     header("Location: ?page=lessonsEditor");
     $conn->close();
     exit();
@@ -24,9 +24,9 @@ if (isset($_GET["delete"]) && strcmp($_GET["delete"], "1") === 0) {
 // Erstellen oder Bearbeiten von Lesson
 if (isset($_POST["title"]) && isset($_POST["description"])) {
     if (strcmp($_GET["id"], "") === 0) {
-        createLesson($conn, htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]));
+        createLesson($conn, trim($_POST["title"]), trim($_POST["description"]));
     } else {
-        modifyLesson($conn, htmlspecialchars($_GET["id"]), htmlspecialchars($_POST["title"]), htmlspecialchars($_POST["description"]));
+        modifyLesson($conn, $_GET["id"], trim($_POST["title"]), trim($_POST["description"]));
     }
     header("Location: ?page=lessonsEditor");
     $conn->close();
@@ -34,8 +34,8 @@ if (isset($_POST["title"]) && isset($_POST["description"])) {
 }
 
 // Laden von Lesson und Aufgaben
-$lesson = getLesson($conn, htmlspecialchars($_GET["id"]));
-$exercises = getExercises($conn, htmlspecialchars($_GET["id"]));
+$lesson = getLesson($conn, $_GET["id"]);
+$exercises = getExercises($conn, $_GET["id"]);
 
 $conn->close();
 ?>
@@ -44,7 +44,7 @@ $conn->close();
     <div class="">
         <h2 class="mb-4 mt-2 editor__title">Lesson Detail Editor</h2>
         <div>
-            <form action="./?page=lessonDetailEditor&id=<?php echo isset($lesson["id"]) ? $lesson["id"] : ""; ?>"
+            <form action="./?page=lessonDetailEditor&id=<?php echo isset($lesson["id"]) ? htmlspecialchars($lesson["id"]) : ""; ?>"
                 method="POST">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="title" name="title" placeholder="Titel"
@@ -61,7 +61,7 @@ $conn->close();
                 <div class="col-12 d-flex justify-content-end gap-2 mb-3">
                     <button type="submit" class="btn btn-primary editor__button">Speichern</button>
                     <?php if (strcmp($_GET["id"], "") !== 0): ?> <a
-                            href="./?page=lessonDetailEditor&delete=1&id=<?php echo $lesson["id"]; ?>"
+                            href="./?page=lessonDetailEditor&delete=1&id=<?php echo htmlspecialchars($lesson["id"]); ?>"
                             class="btn btn-danger">Löschen</a>
                     <?php endif; ?>
                 </div>
@@ -85,12 +85,12 @@ $conn->close();
                             <td><?php echo htmlspecialchars($exercise["title"]); ?></th>
                             <td><?php echo htmlspecialchars($exercise["description"]); ?></th>
                             <td class="text-end"><a
-                                    href="./?page=exerciseDetailEditor&lessonId=<?php echo $lesson["id"]; ?>&id=<?php echo $exercise["id"]; ?>"
+                                    href="./?page=exerciseDetailEditor&lessonId=<?php echo htmlspecialchars($lesson["id"]); ?>&id=<?php echo $exercise["id"]; ?>"
                                     class="btn btn-sm btn-primary">Bearbeiten</a></td>
                         </tr>
                     <?php endforeach ?>
                     <tr>
-                        <td><a href="./?page=exerciseDetailEditor&lessonId=<?php echo $lesson["id"]; ?>&id="
+                        <td><a href="./?page=exerciseDetailEditor&lessonId=<?php echo htmlspecialchars($lesson["id"]); ?>&id="
                                 class="btn btn-sm btn-primary">Neue Aufgabe erstellen</a>
                         </td>
                         <td></td>

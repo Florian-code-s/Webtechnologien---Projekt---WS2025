@@ -5,10 +5,16 @@ require_once __DIR__ . "/../functions/helpers.php";
 require_once __DIR__ . "/../model/userModel.php";
 
 if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"] && $_POST["confirm-password"] && strcmp($_POST["password"], $_POST["confirm-password"]) === 0) {
-    $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
-    $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
-    $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+    $username = trim($_POST["username"]);
+    $email = trim($_POST["email"]);
+    $password = $_POST["password"];
     $imagePath = "";
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Ungültige E-Mail-Adresse";
+        return;
+    }
+
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
         if (!validateFile($picture)) {
@@ -18,7 +24,9 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
         $uploadDir = "../uploads/";
         ensureDirectoryExists($uploadDir);
         $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
-        $imagePath = $uploadDir . $safeUsername . "." . $uploadExt;
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+        $imagePath = $uploadDir . $username .  "_". $timestamp . "." . $uploadExt;
         if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
             echo "Fehler beim Hochladen des Profilbildes!";
             return;
@@ -26,12 +34,12 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
     }
     
     $salt = getRandomString(20);
-    $hashedPassword = hashPassword($safePassword, $salt);
-    if (userExists($conn, $safeUsername) === 1) {
+    $hashedPassword = hashPassword($password, $salt);
+    if (userExists($conn, $username) === 1) {
         echo "Benutzer konnte nicht gespeichert werden";
         return;
     }
-    $result = saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $hashedPassword);
+    $result = saveUser($conn, $username, $email, $imagePath, $salt, $hashedPassword);
     if ($result === false) {
         echo "Benutzer konnte nicht gespeichert werden";
         return;

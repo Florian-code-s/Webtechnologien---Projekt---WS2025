@@ -2,23 +2,23 @@
 
 require_once __DIR__ . "/../functions/helpers.php";
 
-function saveUser($conn, $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash)
+function saveUser(mysqli $conn, string $username, string $email, string $imagePath, string $salt, string $passwordHash): bool
 {
     $sql = "INSERT INTO `users` (`username`, `email`, `image_path`, `salt`, `password_hash`)
         VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt-> bind_param("sssss", $safeUsername, $safeEmail, $imagePath, $salt, $passwordHash);
+    $stmt-> bind_param("sssss", $username, $email, $imagePath, $salt, $passwordHash);
     $result = $stmt->execute();
 
     $stmt->close(); 
     return $result;
 }
 
-function userExists($conn, $safeUsername)
+function userExists(mysqli $conn, string $username): int
 {
     $sql = "SELECT count(*) FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
-    $stmt-> bind_param("s", $safeUsername);
+    $stmt-> bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -27,7 +27,7 @@ function userExists($conn, $safeUsername)
     return $count;
 }
 
-function checkCredentials($conn, $username, $password)
+function checkCredentials(mysqli $conn, string $username, string $password): array
 {
     $sql = "SELECT `salt`, `password_hash`, `is_admin` FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
@@ -52,7 +52,7 @@ function checkCredentials($conn, $username, $password)
     return [false, false];
 }
 
-function getUserDetails($conn)
+function getUserDetails(mysqli $conn): array|null
 {
     $sql = "SELECT `username`, `email`, `image_path` FROM `users` WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
@@ -76,7 +76,7 @@ function getUserDetails($conn)
     return [$username, $email, $imagePath];
 }
 
-function updateUser($conn, $username, $email, $imagePath)
+function updateUser(mysqli $conn, string $username, string $email, string $imagePath): void
 {
     $sql = "UPDATE `users` SET `email` = ?, `image_path` = ? WHERE `username` = ?";
     $stmt = $conn->prepare($sql);
@@ -85,7 +85,7 @@ function updateUser($conn, $username, $email, $imagePath)
     $stmt->close();
 }
 
-function updatePassword($conn, $username, $password)
+function updatePassword(mysqli $conn, string $username, string $password): void
 {
     $salt = getRandomString(20);
     $hashedPassword = hashPassword($password, $salt);

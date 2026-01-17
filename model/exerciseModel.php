@@ -1,6 +1,6 @@
 <?php
 
-function getExercises($conn, $lessonId)
+function getExercises(mysqli $conn, string $lessonId): array
 {
     $sql = "SELECT `id`, `title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises` WHERE `fk_id_lessons` = ?";
     $stmt = $conn->prepare($sql);
@@ -17,7 +17,7 @@ function getExercises($conn, $lessonId)
     return $resultExercises;
 }
 
-function getExercise($conn, $id)
+function getExercise(mysqli $conn, string $id): array|bool|null
 {
     $sql = "SELECT `id`, `title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons` FROM `exercises`  WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
@@ -28,7 +28,7 @@ function getExercise($conn, $id)
     return $result->fetch_array();
 }
 
-function modifyExercise($conn, $id, $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer)
+function modifyExercise(mysqli $conn, string $id, string $title, string $description, string $boxHtml, string $infoText, string $hintLink, string $correctAnswer): bool
 {
     $sql = "UPDATE `exercises` SET `title` = ?, `description` = ?, `box_html` = ?, `info_text` = ?, `hint_link` = ?, `correct_answer` = ? WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
@@ -38,7 +38,7 @@ function modifyExercise($conn, $id, $title, $description, $boxHtml, $infoText, $
     return $result;
 }
 
-function createExercise($conn, $title, $description, $boxHtml, $infoText, $hintLink, $correctAnswer, $lessonId)
+function createExercise(mysqli $conn, string $title, string $description, string $boxHtml, string $infoText, string $hintLink, string $correctAnswer, string $lessonId): bool
 {
     $sql = "INSERT INTO `exercises` (`title`, `description`, `box_html`, `info_text`, `hint_link`, `correct_answer`, `fk_id_lessons`)
         VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -49,7 +49,7 @@ function createExercise($conn, $title, $description, $boxHtml, $infoText, $hintL
     return $result;
 }
 
-function deleteExercise($conn, $id)
+function deleteExercise(mysqli $conn, string $id): bool
 {
     $sql = "DELETE FROM `exercises` WHERE `id` = ?";
     $stmt = $conn->prepare($sql);
