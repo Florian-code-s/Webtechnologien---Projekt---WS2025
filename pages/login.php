@@ -8,7 +8,7 @@ $error = "";
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
-    if(checkCredentials($safeUsername, $safePassword)) {
+    if(checkCredentials($conn,$safeUsername, $safePassword)) {
         $_SESSION["user"] = $safeUsername;
         $_SESSION["logged_in"] = true;
         $_SESSION["is_admin"] = $credCheck[1];
