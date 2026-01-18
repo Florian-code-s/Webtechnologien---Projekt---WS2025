@@ -11,6 +11,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
     $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
     if(checkCredentials($safeUsername, $safePassword)) {
+        $_SESSION['isAdmin'] = true;
         $_SESSION["user"] = $safeUsername;
         $_SESSION["logged_in"] = true;
         header("Location: ?page=home");

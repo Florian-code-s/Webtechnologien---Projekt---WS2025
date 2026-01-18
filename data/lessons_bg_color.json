@@ -1,0 +1,7 @@
+{
+    "title": "Background ",
+    "description": "Schreibe den CSS-Code, um diese Box rot zu f\u00e4rben.",
+    "task_box_style": "background-color: red; width: 200%; height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;",
+    "info": "Mit der CSS-Eigenschaft background-color kannst du die Hintergrundfarbe eines Elements setzen. Beispiel:\r\n.box {\r\n  background-color: red;\r\n}",
+    "hint_link": "?page=wiki"
+}

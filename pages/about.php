@@ -34,7 +34,7 @@
       <div class="col-md-6">
         <div class="card h-100 border-primary">
           <div class="card-body">
-            <h5 class="card-title text-primary">📚 Wiki & Dokumentation</h5>
+            <h5 class="card-title text-primary">Wiki & Dokumentation</h5>
             <p class="card-text">
               Umfassende Dokumentation und Erklärungen zu CSS-Konzepten mit Code-Beispielen und Best Practices. 
               Perfekt zum Nachschlagen und Vertiefen deines Wissens.
@@ -45,7 +45,7 @@
       <div class="col-md-6">
         <div class="card h-100 border-primary">
           <div class="card-body">
-            <h5 class="card-title text-primary">🎓 Lessons</h5>
+            <h5 class="card-title text-primary">Lessons</h5>
             <p class="card-text">
               Strukturierte Lektionen, die dich Schritt für Schritt durch wichtige Konzepte führen. 
               Ideal für Anfänger, die systematisch lernen möchten.
@@ -56,7 +56,7 @@
       <div class="col-md-6">
         <div class="card h-100 border-primary">
           <div class="card-body">
-            <h5 class="card-title text-primary">✅ Abgeschlossene Lektionen</h5>
+            <h5 class="card-title text-primary">Abgeschlossene Lektionen</h5>
             <p class="card-text">
               Verfolge deinen Lernfortschritt. Hier kannst du sehen, welche Lektionen du bereits abgeschlossen hast 
               und deine Erfolge feiern.
@@ -67,7 +67,7 @@
       <div class="col-md-6">
         <div class="card h-100 border-primary">
           <div class="card-body">
-            <h5 class="card-title text-primary">🎨 Classroom</h5>
+            <h5 class="card-title text-primary">Classroom</h5>
             <p class="card-text">
               Interaktive Übungen und Projekte, um dein erlerntes Wissen praktisch anzuwenden 
               und echte Websites zu bauen.
@@ -92,10 +92,10 @@
   <section class="mb-5">
     <h2 class="text-secondary fw-bold mb-3">Für Wen ist Diese Plattform?</h2>
     <ul class="list-group list-group-flush mb-4">
-      <li class="list-group-item"><strong>🎯 Anfänger:</strong> Keine Vorkenntnisse nötig — wir starten bei den Grundlagen.</li>
-      <li class="list-group-item"><strong>🎯 Hobbyprogrammierer:</strong> Lerne in deinem eigenen Tempo, wann es dir passt.</li>
-      <li class="list-group-item"><strong>🎯 Profis:</strong> Vertiefen und auffrischen dein Wissen über moderne CSS-Techniken.</li>
-      <li class="list-group-item"><strong>🎯 Studenten:</strong> Nutze diese Ressource als ergänzendes Lernmaterial.</li>
+      <li class="list-group-item"><strong>Anfänger:</strong> Keine Vorkenntnisse nötig — wir starten bei den Grundlagen.</li>
+      <li class="list-group-item"><strong>Hobbyprogrammierer:</strong> Lerne in deinem eigenen Tempo, wann es dir passt.</li>
+      <li class="list-group-item"><strong>Profis:</strong> Vertiefen und auffrischen dein Wissen über moderne CSS-Techniken.</li>
+      <li class="list-group-item"><strong>Studenten:</strong> Nutze diese Ressource als ergänzendes Lernmaterial.</li>
     </ul>
   </section>
 
@@ -106,8 +106,8 @@
       zögere nicht, uns zu kontaktieren. Viel Spaß beim Entdecken der faszinierenden Welt der Web-Entwicklung!
     </p>
     <p>
-      <a href="?page=wiki" class="btn btn-primary fw-semibold">🚀 Zum Wiki</a>
-      <a href="?page=lessons" class="btn btn-secondary fw-semibold ms-2">📚 Zu den Lektionen</a>
+      <a href="?page=wiki" class="btn btn-primary fw-semibold">Zum Wiki</a>
+      <a href="?page=lessons" class="btn btn-secondary fw-semibold ms-2">Zu den Lektionen</a>
     </p>
   </section>
 </div>

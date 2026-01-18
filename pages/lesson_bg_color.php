@@ -7,7 +7,6 @@ $isCompleted = in_array($lessonId, $completedLessons);
 $message = '';
 $messageType = '';
 
-// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
     $userAnswer = trim(strtolower(preg_replace('/\s+/', ' ', $_POST['answer'])));
     if (strpos($userAnswer, 'background-color') !== false && strpos($userAnswer, 'red') !== false) {
@@ -24,14 +23,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
         $messageType = 'danger';
     }
 }
+// Load editable lesson content from data file (falls nicht vorhanden, Fallback auf Hardcoded Text)
+$dataFile = __DIR__ . '/../data/lessons_bg_color.json';
+$lessonData = null;
+if (file_exists($dataFile)) {
+    $json = file_get_contents($dataFile);
+    $lessonData = json_decode($json, true);
+}
+if (!$lessonData) {
+    $lessonData = [
+        'title' => 'Background Color Lektion',
+        'description' => 'Schreibe den CSS-Code, um diese Box rot zu färben.',
+        'task_box_style' => 'background-color: red; width: 100%; height: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;',
+        'info' => "Mit der CSS-Eigenschaft background-color kannst du die Hintergrundfarbe eines Elements setzen. Beispiel:\n.box {\n  background-color: red;\n}",
+        'hint_link' => '?page=wiki'
+    ];
+}
+
 ?>
 
 <section class="lessons container py-5">
   <div class="row mb-4">
     <div class="col">
       <a href="?page=lessons" class="btn btn-outline-secondary">&larr; Zurück zu Lektionen</a>
-      <h1 class="display-6 mt-3">Background Color Lektion</h1>
-      <p class="lead">Schreibe den CSS-Code, um diese Box rot zu färben.</p>
+      <h1 class="display-6 mt-3"><?php echo htmlspecialchars($lessonData['title']); ?></h1>
+      <p class="lead"><?php echo htmlspecialchars($lessonData['description']); ?></p>
     </div>
   </div>
 
@@ -46,9 +62,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
         <div class="card-body">
           
           
-          <div style="background-color: red; width: 100%; height: 200px; border-radius: 8px; 
-                      box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;">
+          <div style="<?php echo htmlspecialchars($lessonData['task_box_style']); ?>">
           </div>
+
+          <?php
+          // Admin button placed directly under the color box (left column)
+          include_once __DIR__ . '/../includes/lesson_admin.php';
+          ?>
         </div>
       </div>
     </div>
@@ -89,13 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
         <div class="collapse" id="infoBox">
           <div class="card-body">
             <p>
-              Mit der CSS-Eigenschaft <code>background-color</code> kannst du die Hintergrundfarbe eines Elements setzen.
+              <?php echo nl2br(htmlspecialchars($lessonData['info'])); ?>
             </p>
-            <pre><code>.box {
-  background-color: red;
-}</code></pre>
             <p class="mb-0">
-              <a href="?page=wiki" class="btn btn-sm btn-outline-secondary">📚 Zum Wiki</a>
+              <a href="<?php echo htmlspecialchars($lessonData['hint_link']); ?>" class="btn btn-sm btn-outline-secondary">📚 Zum Wiki</a>
             </p>
           </div>
           </div>
@@ -104,3 +121,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
     </div>
   </div>
 </section>
+
+

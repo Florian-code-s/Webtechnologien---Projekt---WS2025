@@ -6,8 +6,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container my-5">
-  <h1 class="text-primary fw-bold mb-4">Das ist die Startseite</h1>
+<div class="container mt-5">
   <?php
     require_once __DIR__ . "/../pages/lessons.php";
     require_once __DIR__ . "/../pages/finishedLessons.php";
