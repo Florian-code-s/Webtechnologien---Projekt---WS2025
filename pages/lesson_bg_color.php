@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
         $messageType = 'danger';
     }
 }
-// Load editable lesson content from data file (falls nicht vorhanden, Fallback auf Hardcoded Text)
+
 $dataFile = __DIR__ . '/../data/lessons_bg_color.json';
 $lessonData = null;
 if (file_exists($dataFile)) {
@@ -53,7 +53,7 @@ if (!$lessonData) {
 
   <div class="row">
 
-    <!-- Aufgabenbereich -->
+   
     <div class="col-md-6 mb-4">
       <div class="card">
         <div class="card-header bg-primary text-white">
@@ -66,7 +66,7 @@ if (!$lessonData) {
           </div>
 
           <?php
-          // Admin button placed directly under the color box (left column)
+         
           include_once __DIR__ . '/../includes/lesson_admin.php';
           ?>
         </div>

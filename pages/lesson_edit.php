@@ -11,7 +11,7 @@ if (!$isAdmin) {
 $lesson = $_GET['lesson'] ?? 'bg_color';
 $dataFile = __DIR__ . '/../data/lessons_' . preg_replace('/[^a-z0-9_\-]/i', '', $lesson) . '.json';
 
-// Load existing data or defaults
+
 $default = [
     'title' => 'Background Color Lektion',
     'description' => 'Schreibe den CSS-Code, um diese Box rot zu färben.',
