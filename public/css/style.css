@@ -1,156 +1,173 @@
 :root {
-  --bs-primary:   #3B82F6;  /* helles Blau */
-  --bs-dark:      #1E3A8A;  /* dunkles Blau */
-  --bs-warning:   #FACC15;  /* gelb */
-  --bs-body-bg:   #F9FAFB;  /* helles Grau-Weiß */
-  --bs-body-color: #1E293B; /* dunkelgrau-blau */
+    --bs-primary: #3B82F6;
+    /* helles Blau */
+    --bs-dark: #1E3A8A;
+    /* dunkles Blau */
+    --bs-warning: #FACC15;
+    /* gelb */
+    --bs-body-bg: #F9FAFB;
+    /* helles Grau-Weiß */
+    --bs-body-color: #1E293B;
+    /* dunkelgrau-blau */
 }
 
 body {
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    font-family: 'Segoe UI', Arial, sans-serif;
 }
 
 .navbar {
-  background-color: var(--bs-dark);
+    background-color: var(--bs-dark);
     z-index: 1030;
 }
 
-.navbar-brand, .nav-link {
-  color: #fff !important;
+.navbar-brand,
+.nav-link {
+    color: #fff !important;
 }
 
 .nav-link:hover {
-  color: var(--bs-warning) !important;
+    color: var(--bs-warning) !important;
 }
 
 /* Buttons */
 .btn-primary {
-  background-color: var(--bs-primary);
-  border-color: var(--bs-primary);
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
 }
 
 .btn-primary:hover {
-  background-color: var(--bs-warning);
-  border-color: var(--bs-warning);
-  color: var(--bs-body-color);
+    background-color: var(--bs-warning);
+    border-color: var(--bs-warning);
+    color: var(--bs-body-color);
 }
 
 /* Karten (z. B. für Login/Register) */
 .card {
-  border: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .register {
-            background-color: #F9FAFB;
-        }
-        
-        .register__card {
-            width: 400px; 
-            max-width: 100%; 
-            border: none;
-        }
+    background-color: #F9FAFB;
+}
 
-        .register__card--title {
-            color: #1E3A8A;
-        }
+.register__card {
+    width: 400px;
+    max-width: 100%;
+    border: none;
+}
 
-        .register__upload, .profile__upload {
-            color: #6e7174;
-        }
+.register__card--title {
+    color: #1E3A8A;
+}
 
-        .register__button, .changePassword__button, .profile__button {
-            background-color: #3B82F6;
-            border: none;
-        }
+.register__upload,
+.profile__upload {
+    color: #6e7174;
+}
 
-        .register__button:hover, .changePassword__button:hover, .profile__button:hover {
-            background-color: #FACC15;
-            color: #1E293B;
-        }
+.register__button,
+.changePassword__button,
+.profile__button,
+.editor__button {
+    background-color: #3B82F6;
+    border: none;
+}
 
-        .register__link {
-            text-decoration: none;
-        }
+.register__button:hover,
+.changePassword__button:hover,
+.profile__button:hover, 
+.editor__button:hover {
+    background-color: #FACC15;
+    color: #1E293B;
+}
 
-        .register__link:hover {
-            color: #1E3A8A;
-        }
-        
+.register__link {
+    text-decoration: none;
+}
+
+.register__link:hover {
+    color: #1E3A8A;
+}
+
 .login {
-            background-color: #F9FAFB;
-        }
-        
-        .login__card {
-            width: 400px; 
-            max-width: 100%; 
-            border: none;
-        }
+    background-color: #F9FAFB;
+}
 
-        .login__button {
-            background-color: #3B82F6;
-            border: none;
-        }
+.login__card {
+    width: 400px;
+    max-width: 100%;
+    border: none;
+}
 
-        .login__card--title, .changePassword__title, .profile__title {
-            color: #1E3A8A;
-        }
+.login__button {
+    background-color: #3B82F6;
+    border: none;
+}
 
-        .login__button:hover {
-            background-color: #FACC15;
-            color: #1E293B;
-        }
+.login__card--title,
+.changePassword__title,
+.profile__title,
+.editor__title {
+    color: #1E3A8A;
+}
 
-        .login__link {
-            text-decoration: none;
-        }
+.login__button:hover {
+    background-color: #FACC15;
+    color: #1E293B;
+}
 
-        .login__link:hover {
-            color: #1E3A8A;
-        }
+.login__link {
+    text-decoration: none;
+}
 
-        .finishedLessons {
-            background-color: #F9FAFB;
-        }
+.login__link:hover {
+    color: #1E3A8A;
+}
 
-        .finishedLessons__card {
-            width: 800px; 
-            max-width: 100%; 
-            border: none;
-        }
+.finishedLessons {
+    background-color: #F9FAFB;
+}
 
-        .finishedLessons__card--title, .finishedLessonsDiagram__title {
-            color: #1E3A8A;
-        }
+.finishedLessons__card {
+    width: 800px;
+    max-width: 100%;
+    border: none;
+}
 
-        .lessons {
-            background-color: #F9FAFB;
-        }
+.finishedLessons__card--title,
+.finishedLessonsDiagram__title {
+    color: #1E3A8A;
+}
 
-        .lessons__card {
-            width: 800px; 
-            max-width: 100%; 
-            border: none;
-        }
+.lessons {
+    background-color: #F9FAFB;
+}
 
-        .lessons__card--title {
-            color: #1E3A8A;
-        }
+.lessons__card {
+    width: 800px;
+    max-width: 100%;
+    border: none;
+}
 
-        .changePassword {
-            width: 400px; 
-            max-width: 100%;
-        }
+.lessons__card--title {
+    color: #1E3A8A;
+}
 
-        .profile__image {
-          max-height: 300px;
-          max-width: 300px;
-          height: auto;
-          width: auto;
-        }
+.changePassword {
+    width: 400px;
+    max-width: 100%;
+}
 
-        .finishedLessonsDigramFinished {
-          background-color: #3B82F6;
-        }
+.profile__image {
+    max-height: 300px;
+    max-width: 300px;
+    height: auto;
+    width: auto;
+}
+
+.finishedLessonsDigramFinished {
+    background-color: #3B82F6;
+}

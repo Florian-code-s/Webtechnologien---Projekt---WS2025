@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,9 @@ if (!in_array($page, $allowedPages)) {
     $page = 'home';
 }
 
-
+if(in_array($page, $adminPages) && (!isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] !== 1)) {
+    $page = 'home';
+}
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';

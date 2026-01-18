@@ -14,6 +14,9 @@
         <li class="nav-item"><a class="nav-link text-white" href="?page=about">Über uns</a></li>
         <li class="nav-item"><a class="nav-link text-white" href="?page=wiki">Wiki</a></li>
         
+        <?php if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] === 1): ?> 
+        <li class="nav-item"><a class="nav-link text-white" href="?page=lessonsEditor">Lessons Editor</a></li>
+        <?php endif; ?>
 
         <?php if (isset($_SESSION["user"])): ?> 
         <li class="nav-item"><a class="nav-link text-white" href="?page=profile">Profil</a></li>

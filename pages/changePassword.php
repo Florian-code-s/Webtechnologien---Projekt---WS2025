@@ -1,32 +1,33 @@
 <?php
 $error = "";
 
-function checkCredentials($username, $password)
-{
-    if (strcmp($username, "User") == 0 && strcmp($password, "123") == 0) {
-        return true;
-    }
-    return false;
-}
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+require_once __DIR__ . "/../model/userModel.php";
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    $conn->close();
+    exit();
 }
 
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
-    $safeCurrentPassword = htmlspecialchars($_POST["current-password"], ENT_QUOTES, 'UTF-8');
-    $safeNewPassword = htmlspecialchars($_POST["new-password"], ENT_QUOTES, 'UTF-8');
-    if (!checkCredentials($_SESSION["user"], $safeCurrentPassword)) {
+    $currentPassword = $_POST["current-password"];
+    $newPassword = $_POST["new-password"];
+    if (!checkCredentials($conn, $_SESSION["user"], $currentPassword)[0]) {
         $error = "Passwort nicht korrekt";
     }
     if (strcmp($_POST["new-password"], $_POST["confirm-password"]) !== 0) {
         $error = "Passwörter stimmen nicht überein";
     }
     if (strcmp($error, "") === 0) {
-        //To Do: save password for user in DB
+        updatePassword($conn, $_SESSION["user"], $newPassword);
         header("Location: ./?page=profile");
+        $conn->close();
+        exit();
     }
 }
+$conn->close();
 ?>
 
 <section class="container my-5 changePassword">

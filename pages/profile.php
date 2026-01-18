@@ -1,97 +1,64 @@
 <?php
 
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+require_once __DIR__ . "/../model/userModel.php";
+
 $username = "";
 $email = "";
 $imageData = "";
-
-function checkMagicNumbers($fileName)
-{
-    $acceptedMagicNumbers = ["89504E47", "FFD8FFDB", "FFD8FFE0", "FFD8FFEE", "FFD8FFE1", "47494638"];
-    $f = fopen($fileName, "r");
-    $magicNumber = fread($f, 4);
-    fclose($f);
-    if (in_array(strtoupper(substr(bin2hex($magicNumber), 0, 8)), $acceptedMagicNumbers)) {
-        return true;
-    }
-    return false;
-}
-
-function getFileSuffix($fileName)
-{
-    $pos = strrpos($fileName, ".");
-    $suffix = substr($fileName, $pos + 1);
-    return $suffix;
-}
-
-function checkSuffix($fileName)
-{
-    $acceptedSuffixes = ["png", "jpg", "gif"];
-    $suffix = getFileSuffix($fileName);
-    if (in_array($suffix, $acceptedSuffixes)) {
-        return true;
-    }
-    return false;
-}
-
-function validateFile($file)
-{
-    $maxFileSize = 5000000;
-    $validMagicNumber = checkMagicNumbers($file["tmp_name"]);
-    $validFileSize = ($file["size"] <= $maxFileSize);
-    $validSuffix = checkSuffix($file["name"]);
-    if ($validMagicNumber && $validFileSize && $validSuffix) {
-        return true;
-    }
-    return false;
-}
-
-function ensureDirectoryExists($path)
-{
-    if (!is_dir($path)) {
-        mkdir($path);
-    }
-}
-
-function fillUserDetails()
-{
-    global $username;
-    global $email;
-    global $imageData;
-    //To do: read user details from DB
-    $username = "User";
-    $email = "User@myemail.com";
-    //load user profile image if exists, otherwise show default image
-    if (file_exists("../uploads/" . $_SESSION["user"] . ".img")) {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../uploads/" . $_SESSION["user"] . ".img"));
-    } else {
-        $imageData = "data:image/*;base64, " . base64_encode(file_get_contents("../public/images/user_default.png"));
-    }
-}
+$imagePath = "";
 
 if (!$IsLoggedIn) {
     header("Location: ./?page=home");
+    $conn->close();
+    exit();
 }
 
-
 if (!empty($_POST) && $_POST["email"]) {
-    $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
+    $ud = getUserDetails($conn);
+    if($ud === null) {
+        echo "Fehler beim Userupdate";
+        return;
+    }
+    $imagePath = $ud[2];
+
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
+        $uploadDir = "../uploads/";
+        $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+        $imagePath = $uploadDir . $_SESSION["user"] .  "_". $timestamp . "." . $uploadExt;
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
             return;
         }
-        ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], "../uploads/" . $_SESSION["user"] . ".img");
-        //echo realpath("../uploads/" . $safeUsername . getFileSuffix($picture["name"]));
-    } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists("../uploads/" . $_SESSION["user"] . ".img")) {
-        unlink("../uploads/" . $_SESSION["user"] . ".img");
+        ensureDirectoryExists($uploadDir);
+        if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
+            echo "Fehler beim Hochladen des Profilbildes!";
+            return;
+        }
+    } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists($imagePath)) {
+        unlink($imagePath);
+        $imagePath = "";
     }
-    //To Do: save user in DB
-    //header("Location: ./?page=profile");
-
+    $email = trim($_POST["email"]);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Ungültige E-Mail-Adresse";
+        return;
+    }
+    updateUser($conn, $_SESSION["user"], $email, $imagePath);
 }
-fillUserDetails();
+
+$userDetails = getUserDetails($conn);
+if ($userDetails != null) {
+    $username = htmlspecialchars($userDetails[0]);
+    $email = htmlspecialchars($userDetails[1]);
+    $imagePath = $userDetails[2];
+}
+
+$conn->close();
 ?>
 
 <section class="container my-5 profile">
@@ -111,7 +78,7 @@ fillUserDetails();
                 <a class="btn btn-primary" role="button" href="./?page=changePassword">Passwort ändern</a>
             </div>
             <div class="mb-3">
-                <?php echo '<img src="' . $imageData . '" class="profile__image" alt="Profilbild" />' ?>
+                <?php echo '<img src="' . $imagePath . '" class="profile__image" alt="Profilbild" />' ?>
             </div>
             <div class="mb-3 text-start form-check">
                 <input type="checkbox" class="form-check-input" id="deleteImage" name="deleteImage">

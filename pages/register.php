@@ -1,70 +1,55 @@
 <?php
 
-function checkMagicNumbers($fileName)
-{
-    $acceptedMagicNumbers = ["89504E47", "FFD8FFDB", "FFD8FFE0", "FFD8FFEE", "FFD8FFE1", "47494638"];
-    $f = fopen($fileName, "r");
-    $magicNumber = fread($f, 4);
-    fclose($f);
-    if (in_array(strtoupper(substr(bin2hex($magicNumber), 0, 8)), $acceptedMagicNumbers)) {
-        return true;
-    }
-    return false;
-}
-
-function getFileSuffix($fileName)
-{
-    $pos = strrpos($fileName, ".");
-    $suffix = substr($fileName, $pos + 1);
-    return $suffix;
-}
-
-function checkSuffix($fileName)
-{
-    $acceptedSuffixes = ["png", "jpg", "gif"];
-    $suffix = getFileSuffix($fileName);
-    if (in_array($suffix, $acceptedSuffixes)) {
-        return true;
-    }
-    return false;
-}
-
-function validateFile($file)
-{
-    $maxFileSize = 5000000;
-    $validMagicNumber = checkMagicNumbers($file["tmp_name"]);
-    $validFileSize = ($file["size"] <= $maxFileSize);
-    $validSuffix = checkSuffix($file["name"]);
-    if ($validMagicNumber && $validFileSize && $validSuffix) {
-        return true;
-    }
-    return false;
-}
-
-function ensureDirectoryExists($path)
-{
-    if (!is_dir($path)) {
-        mkdir($path);
-    }
-}
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . "/../functions/helpers.php";
+require_once __DIR__ . "/../model/userModel.php";
 
 if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"] && $_POST["confirm-password"] && strcmp($_POST["password"], $_POST["confirm-password"]) === 0) {
-    $safeUsername = htmlspecialchars($_POST["username"], ENT_QUOTES, 'UTF-8');
-    $safeEmail = htmlspecialchars($_POST["email"], ENT_QUOTES, 'UTF-8');
-    $safePassword = htmlspecialchars($_POST["password"], ENT_QUOTES, 'UTF-8');
+    $username = trim($_POST["username"]);
+    $email = trim($_POST["email"]);
+    $password = $_POST["password"];
+    $imagePath = "";
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Ungültige E-Mail-Adresse";
+        return;
+    }
+
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
             return;
         }
-        ensureDirectoryExists("../uploads"); //To Do: set correct path
-        move_uploaded_file($picture["tmp_name"], "../uploads/" . $safeUsername . ".img");
-        //echo realpath("../uploads/" . $safeUsername . getFileSuffix($picture["name"]));
+        $uploadDir = "../uploads/";
+        ensureDirectoryExists($uploadDir);
+        $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
+        $date = new DateTime();
+        $timestamp = $date->getTimestamp();
+        $imagePath = $uploadDir . $username .  "_". $timestamp . "." . $uploadExt;
+        if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
+            echo "Fehler beim Hochladen des Profilbildes!";
+            return;
+        }
     }
-    //To Do: save user in DB
+    
+    $salt = getRandomString(20);
+    $hashedPassword = hashPassword($password, $salt);
+    if (userExists($conn, $username) === 1) {
+        echo "Benutzer konnte nicht gespeichert werden";
+        return;
+    }
+    $result = saveUser($conn, $username, $email, $imagePath, $salt, $hashedPassword);
+    if ($result === false) {
+        echo "Benutzer konnte nicht gespeichert werden";
+        return;
+    }
+
     header("Location: ./?page=login");
+    $conn->close();
+    exit();
 }
+$conn->close();
 ?>
 
 <section class="register">
