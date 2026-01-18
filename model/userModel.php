@@ -36,6 +36,7 @@ function checkCredentials(mysqli $conn, string $username, string $password): arr
     $result = $stmt->get_result();
 
     if ($result->num_rows !== 1) {
+        $stmt->close();
         return [false, false];
     }
 
@@ -61,6 +62,7 @@ function getUserDetails(mysqli $conn): array|null
     $result = $stmt->get_result();
 
     if ($result->num_rows !== 1) {
+        $stmt->close();
         return null;
     }
 
