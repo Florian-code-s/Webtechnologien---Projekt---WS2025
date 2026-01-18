@@ -29,9 +29,11 @@ if (!in_array($page, $allowedPages)) {
     $page = 'home';
 }
 
+/* Admin-only pages
 if(in_array($page, $adminPages) && (!isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] !== 1)) {
     $page = 'home';
 }
+ */
 
 require_once __DIR__ . '/../includes/header.php';
 require_once __DIR__ . '/../includes/navbar.php';
