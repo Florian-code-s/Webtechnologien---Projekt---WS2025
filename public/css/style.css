@@ -49,17 +49,26 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.register {
+.register,
+.login,
+.lessons {
     background-color: #F9FAFB;
 }
 
-.register__card {
+.register__card,
+.login__card {
     width: 400px;
     max-width: 100%;
     border: none;
 }
 
-.register__card--title {
+.register__card--title,
+.login__card--title,
+.changePassword__title,
+.profile__title,
+.editor__title,
+.register__link:hover,
+.login__link:hover {
     color: #1E3A8A;
 }
 
@@ -69,6 +78,7 @@ body {
 }
 
 .register__button,
+.login__button,
 .changePassword__button,
 .profile__button,
 .editor__button {
@@ -77,6 +87,7 @@ body {
 }
 
 .register__button:hover,
+.login__button:hover,
 .changePassword__button:hover,
 .profile__button:hover, 
 .editor__button:hover {
@@ -84,76 +95,9 @@ body {
     color: #1E293B;
 }
 
-.register__link {
-    text-decoration: none;
-}
-
-.register__link:hover {
-    color: #1E3A8A;
-}
-
-.login {
-    background-color: #F9FAFB;
-}
-
-.login__card {
-    width: 400px;
-    max-width: 100%;
-    border: none;
-}
-
-.login__button {
-    background-color: #3B82F6;
-    border: none;
-}
-
-.login__card--title,
-.changePassword__title,
-.profile__title,
-.editor__title {
-    color: #1E3A8A;
-}
-
-.login__button:hover {
-    background-color: #FACC15;
-    color: #1E293B;
-}
-
+.register__link,
 .login__link {
     text-decoration: none;
-}
-
-.login__link:hover {
-    color: #1E3A8A;
-}
-
-.finishedLessons {
-    background-color: #F9FAFB;
-}
-
-.finishedLessons__card {
-    width: 800px;
-    max-width: 100%;
-    border: none;
-}
-
-.finishedLessons__card--title,
-.finishedLessonsDiagram__title {
-    color: #1E3A8A;
-}
-
-.lessons {
-    background-color: #F9FAFB;
-}
-
-.lessons__card {
-    width: 800px;
-    max-width: 100%;
-    border: none;
-}
-
-.lessons__card--title {
-    color: #1E3A8A;
 }
 
 .changePassword {
@@ -166,8 +110,4 @@ body {
     max-width: 300px;
     height: auto;
     width: auto;
-}
-
-.finishedLessonsDigramFinished {
-    background-color: #3B82F6;
 }

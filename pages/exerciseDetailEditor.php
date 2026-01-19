@@ -3,6 +3,12 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/exerciseModel.php';
 
+if (!$IsLoggedIn || !isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] !== 1) {
+    header("Location: ./?page=login");
+    $conn->close();
+    exit();
+}
+
 $exercise = [];
 
 if (!isset($_GET["id"]) || !isset($_GET["lessonId"])) {

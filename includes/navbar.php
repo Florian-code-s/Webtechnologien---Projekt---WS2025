@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg sticky-top" style="background-color:#1E3A8A;">
   <div class="container">
-    <a class="navbar-brand text-white fw-bold" href="#"><span class="text-primary">C</span>reate <span class="text-primary">S</span>tyling <span class="text-primary">S</span>kills</a>
+    <a class="navbar-brand text-white fw-bold" href="?page=home"><span class="text-primary">C</span>reate <span class="text-primary">S</span>tyling <span class="text-primary">S</span>kills</a>
 
     <!-- Toggle-Button für kleine Bildschirme -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

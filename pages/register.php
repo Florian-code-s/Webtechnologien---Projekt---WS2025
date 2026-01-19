@@ -12,6 +12,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "Ungültige E-Mail-Adresse";
+        $conn->close();
         return;
     }
 
@@ -19,6 +20,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
         $picture = $_FILES["picture"];
         if (!validateFile($picture)) {
             echo "Profilbild ungültig";
+            $conn->close();
             return;
         }
         $uploadDir = "../uploads/";
@@ -29,19 +31,23 @@ if (!empty($_POST) && $_POST["username"] && $_POST["email"] && $_POST["password"
         $imagePath = $uploadDir . $username .  "_". $timestamp . "." . $uploadExt;
         if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
             echo "Fehler beim Hochladen des Profilbildes!";
+            $conn->close();
             return;
         }
     }
     
-    $salt = getRandomString(20);
-    $hashedPassword = hashPassword($password, $salt);
     if (userExists($conn, $username) === 1) {
         echo "Benutzer konnte nicht gespeichert werden";
+        $conn->close();
         return;
     }
+    
+    $salt = getRandomString(20);
+    $hashedPassword = hashPassword($password, $salt);
     $result = saveUser($conn, $username, $email, $imagePath, $salt, $hashedPassword);
     if ($result === false) {
         echo "Benutzer konnte nicht gespeichert werden";
+        $conn->close();
         return;
     }
 
