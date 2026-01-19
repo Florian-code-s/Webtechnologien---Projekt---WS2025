@@ -113,7 +113,7 @@ function startLesson(mysqli $conn, int $userId, int $lessonId): bool
 function loadProgress(mysqli $conn, int $userId, int $lessonId): ?array
 {
     $sql = "
-        SELECT status, progress_percent
+        SELECT status, progress_percent, state_json
         FROM user_lesson_progress
         WHERE user_id = ? AND lesson_id = ?
     ";
@@ -128,4 +128,60 @@ function loadProgress(mysqli $conn, int $userId, int $lessonId): ?array
     return $progress ?: null;
 }
 
-function saveProgress(mysqli )
+function saveProgress(mysqli $conn, int $userId, int $lessonId, int $percent, ?string $stateJson): bool
+{
+    $sql = "
+        INSERT INTO user_lesson_progress (user_id, lesson_id, status, progress_percent, state_json)
+        VALUES (?, ?, 'in_progress', ?, ?)
+        ON DUPLICATE KEY UPDATE 
+        progress_percent = VALUES(progress_percent),
+        state_json = VALUES(state_json)
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiis", $userId, $lessonId, $percent, $stateJson);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
+}
+
+function completeLesson(mysqli $conn, int $userId, int $lessonId): bool
+{
+    $sql = "
+        UPDATE user_lesson_progress
+        SET status = 'completed', progress_percent = 100
+        WHERE user_id = ? AND lesson_id = ?
+    ";
+
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $userId, $lessonId);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
+}
+
+function getCompletedLessons(mysqli $conn, int $userId): array
+{
+    $sql = "
+    SELECT l.id, l.title, l.description
+    FROM user_lesson_progress ulp
+    JOIN lessons l ON l.id = ulp.lesson_id
+    WHERE ulp.user_id = ? AND ulp.status = 'completed'
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $completedLessons = [];
+    while ($row = $result->fetch_assoc()) {
+        $completedLessons[] = $row;
+    }
+
+    $stmt->close();
+    return $completedLessons;
+}
