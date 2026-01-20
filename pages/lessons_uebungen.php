@@ -1,9 +1,8 @@
+/* Hier werden dynamisch die Lessons aus der DB geladen */
 <?php
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/lessonModel.php';
 require_once __DIR__ . '/../model/exerciseModel.php';
-
-
 
 
 if (!isset($IsLoggedIn) || !$IsLoggedIn) {
