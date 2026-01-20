@@ -8,14 +8,14 @@ $error = "";
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
-    $credCheck = checkCredentialsWithUserId($conn, $username, $password);
+    $credCheck = checkCredentials($conn, $username, $password);
     if ($credCheck[0]) {
         $_SESSION["user"] = $username;
         $_SESSION["logged_in"] = true;
         $_SESSION["is_admin"] = $credCheck[1];
-        $_SESSION["user_id"] = $credCheck[2];
         session_regenerate_id();
         header("Location: ?page=home");
+        exit();
     } else {
         $_SESSION["user"] = null;
         $_SESSION["logged_in"] = false;
@@ -23,6 +23,7 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
         $error = "Login nicht erfolgreich";
     }
 }
+
 $conn->close();
 ?>
 

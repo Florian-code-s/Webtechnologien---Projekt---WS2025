@@ -26,7 +26,7 @@ function userExists(mysqli $conn, string $username): int
     $stmt->close();
     return $count;
 }
-/* Überprüft, ob die Anmeldedaten korrekt sind.
+
 function checkCredentials(mysqli $conn, string $username, string $password): array
 {
     $sql = "SELECT `salt`, `password_hash`, `is_admin` FROM `users` WHERE `username` = ?";
@@ -52,37 +52,6 @@ function checkCredentials(mysqli $conn, string $username, string $password): arr
     }
     return [false, false];
 }
-*/
-function checkCredentialsWithUserId(mysqli $conn, string $username, string $password): array
-{
-    $sql = "SELECT `id`, `salt`, `password_hash`, `is_admin`
-            FROM `users`
-            WHERE `username` = ?
-            LIMIT 1";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows !== 1) {
-        $stmt->close();
-        return [false, false, null];
-    }
-
-    $row = $result->fetch_assoc();
-    $stmt->close();
-
-    $hashedPassword = hashPassword($password, $row['salt']);
-
-    #hash_equals besser als strcmp wegen Timing-Angriffen
-    if (hash_equals($row['password_hash'], $hashedPassword)) {
-        return [true, (bool)$row['is_admin'], (int)$row['id']];
-    }
-
-    return [false, false, null];
-}
-
 
 function getUserDetails(mysqli $conn): array|null
 {
