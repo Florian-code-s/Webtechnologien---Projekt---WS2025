@@ -6,7 +6,6 @@ require_once __DIR__ . "/../model/userModel.php";
 
 $username = "";
 $email = "";
-$imageData = "";
 $imagePath = "";
 
 if (!$IsLoggedIn) {
@@ -19,24 +18,28 @@ if (!empty($_POST) && $_POST["email"]) {
     $ud = getUserDetails($conn);
     if($ud === null) {
         echo "Fehler beim Userupdate";
+        $conn->close();
         return;
     }
     $imagePath = $ud[2];
 
     if (isset($_FILES["picture"]) && strcmp("", $_FILES["picture"]["name"]) !== 0) {
         $picture = $_FILES["picture"];
+        if (!validateFile($picture)) {
+            echo "Profilbild ungültig";
+            $conn->close();
+            return;
+        }
         $uploadDir = "../uploads/";
+        ensureDirectoryExists($uploadDir);
         $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
         $date = new DateTime();
         $timestamp = $date->getTimestamp();
+        unlink($imagePath);
         $imagePath = $uploadDir . $_SESSION["user"] .  "_". $timestamp . "." . $uploadExt;
-        if (!validateFile($picture)) {
-            echo "Profilbild ungültig";
-            return;
-        }
-        ensureDirectoryExists($uploadDir);
         if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
             echo "Fehler beim Hochladen des Profilbildes!";
+            $conn->close();
             return;
         }
     } else if (isset($_POST["deleteImage"]) && $_POST["deleteImage"] && file_exists($imagePath)) {
@@ -46,6 +49,7 @@ if (!empty($_POST) && $_POST["email"]) {
     $email = trim($_POST["email"]);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo "Ungültige E-Mail-Adresse";
+        $conn->close();
         return;
     }
     updateUser($conn, $_SESSION["user"], $email, $imagePath);

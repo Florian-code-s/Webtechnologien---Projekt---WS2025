@@ -7,7 +7,7 @@ $error = "";
 
 if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
     $username = trim($_POST["username"]);
-    $password = trim($_POST["password"]);
+    $password = $_POST["password"];
     $credCheck = checkCredentials($conn, $username, $password);
     if ($credCheck[0]) {
         $_SESSION["user"] = $username;

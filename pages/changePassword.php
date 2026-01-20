@@ -14,10 +14,11 @@ if (!$IsLoggedIn) {
 if (!empty($_POST) && $_POST["current-password"] && $_POST["new-password"] && $_POST["confirm-password"]) {
     $currentPassword = $_POST["current-password"];
     $newPassword = $_POST["new-password"];
+    $confirmPassword = $_POST["confirm-password"];
     if (!checkCredentials($conn, $_SESSION["user"], $currentPassword)[0]) {
         $error = "Passwort nicht korrekt";
     }
-    if (strcmp($_POST["new-password"], $_POST["confirm-password"]) !== 0) {
+    if (strcmp($newPassword, $confirmPassword) !== 0) {
         $error = "Passwörter stimmen nicht überein";
     }
     if (strcmp($error, "") === 0) {
