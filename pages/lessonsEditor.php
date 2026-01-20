@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/lessonModel.php';
 
 if (!$IsLoggedIn || !isset($_SESSION["is_admin"]) || $_SESSION["is_admin"] !== 1) {
-    header("Location: ./?page=login");
+    header("Location: ./?page=home");
     $conn->close();
     exit();
 }
@@ -16,7 +16,7 @@ $conn->close();
 
 <section class="container my-5 editor">
     <div class="">
-        <h2 class="mb-4 mt-2 editor__title">Lessons Editor</h2>
+        <h1 class="fw-bold mb-4 mt-2 editor__title">Lessons Editor</h1>
         <table class="table table-responsive align-middle text-break">
             <thead>
                 <tr>

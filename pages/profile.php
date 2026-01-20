@@ -67,7 +67,7 @@ $conn->close();
 
 <section class="container my-5 profile">
     <div class="">
-        <h2 class="mb-4 mt-2 profile__title">Profil</h2>
+        <h1 class="fw-bold mb-4 mt-2 profile__title">Profil</h1>
         <form action="./?page=profile" method="POST" enctype="multipart/form-data">
             <div class="form-floating mb-3">
                 <?php echo '<input type="text" class="form-control" id="username" placeholder="Benutzername" value="' . $username . '" disabled>' ?>

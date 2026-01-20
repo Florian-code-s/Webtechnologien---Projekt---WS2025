@@ -5,22 +5,26 @@ require_once __DIR__ . "/../model/userModel.php";
 
 $error = "";
 
-if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
-    $username = trim($_POST["username"]);
-    $password = $_POST["password"];
-    $credCheck = checkCredentials($conn, $username, $password);
-    if ($credCheck[0]) {
-        $_SESSION["user"] = $username;
-        $_SESSION["logged_in"] = true;
-        $_SESSION["is_admin"] = $credCheck[1];
-        $_SESSION["user_id"] = getUserIdByUsername($conn, $username);
-        session_regenerate_id();
-        header("Location: ?page=home");
+if (!empty($_POST)) {
+    if(!isset($_POST["username"]) || !isset($_POST["password"]) || strcmp($_POST["username"], "") === 0 || strcmp($_POST["password"], "") === 0) {
+        $error = "Logindaten unvollständig";
     } else {
-        $_SESSION["user"] = null;
-        $_SESSION["logged_in"] = false;
-        $_SESSION["is_admin"] = false;
-        $error = "Login nicht erfolgreich";
+        $username = trim($_POST["username"]);
+        $password = $_POST["password"];
+        $credCheck = checkCredentials($conn, $username, $password);
+        if ($credCheck[0]) {
+            $_SESSION["user"] = $username;
+            $_SESSION["logged_in"] = true;
+            $_SESSION["is_admin"] = $credCheck[1];
+            $_SESSION["user_id"] = getUserIdByUsername($conn, $username);
+            session_regenerate_id();
+            header("Location: ?page=home");
+        } else {
+            $_SESSION["user"] = null;
+            $_SESSION["logged_in"] = false;
+            $_SESSION["is_admin"] = false;
+            $error = "Login nicht erfolgreich";
+        }
     }
 }
 
