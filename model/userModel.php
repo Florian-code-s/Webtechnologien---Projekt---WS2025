@@ -100,4 +100,17 @@ function updatePassword(mysqli $conn, string $username, string $password): void
     $stmt->close();
 }
 
+function getUserIdByUsername(mysqli $conn, string $username): ?int
+{
+    $sql = "SELECT `id` FROM `users` WHERE `username` = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $stmt->close();
+
+    return $row ? (int)$row['id'] : null;
+}
+
 ?>

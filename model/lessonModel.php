@@ -65,135 +65,25 @@ function deleteLesson(mysqli $conn, string $id): bool
     return $result1 && $result2;
 }
 
-function getLessonsWithStatus(mysqli $conn, int $userId): array
+function countAllLessons(mysqli $conn): int
 {
-  $sql = "
-        SELECT
-            l.id,
-            l.title,
-            l.description,
-            COALESCE(ulp.status, 'not_started') AS status,
-            COALESCE(ulp.progress_percent, 0) AS progress_percent
-        FROM lessons l
-        LEFT JOIN user_lesson_progress ulp
-            ON ulp.lesson_id = l.id AND ulp.user_id = ?
-        ORDER BY l.id ASC
-    ";  
+    $sql = "SELECT COUNT(*) AS cnt FROM lessons";
+    $res = $conn->query($sql);
+    $row = $res->fetch_assoc();
+    return (int)$row['cnt'];
+}
 
+function countCompletedLessons(mysqli $conn, int $userId): int
+{
+    $sql = "SELECT COUNT(*) AS cnt
+            FROM user_lesson_progress
+            WHERE user_id = ? AND status = 'completed'";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $lessons = [];
-    while ($row = $result->fetch_assoc()) {
-        $lessons[] = $row;
-    }
-
-    $stmt->close();
-    return $lessons;
-}
-
-function startLesson(mysqli $conn, int $userId, int $lessonId): bool
-{
-    $sql = "
-        INSERT INTO user_lesson_progress (user_id, lesson_id, status, progress_percent)
-        VALUES (?, ?, 'in_progress', 0)
-        ON DUPLICATE KEY UPDATE status = 'in_progress'
-    ";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $userId, $lessonId);
-    $result = $stmt->execute();
-    $stmt->close();
-
-    return $result;
-}
-
-function loadProgress(mysqli $conn, int $userId, int $lessonId): ?array
-{
-    $sql = "
-        SELECT status, progress_percent, state_json
-        FROM user_lesson_progress
-        WHERE user_id = ? AND lesson_id = ?
-    ";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $userId, $lessonId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $progress = $result->fetch_assoc();
-    $stmt->close();
-
-    return $progress ?: null;
-}
-
-function saveProgress(mysqli $conn, int $userId, int $lessonId, int $percent, ?string $stateJson): bool
-{
-    $sql = "
-        INSERT INTO user_lesson_progress (user_id, lesson_id, status, progress_percent, state_json)
-        VALUES (?, ?, 'in_progress', ?, ?)
-        ON DUPLICATE KEY UPDATE 
-        progress_percent = VALUES(progress_percent),
-        state_json = VALUES(state_json)
-    ";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiis", $userId, $lessonId, $percent, $stateJson);
-    $result = $stmt->execute();
-    $stmt->close();
-
-    return $result;
-}
-
-function completeLesson(mysqli $conn, int $userId, int $lessonId): bool
-{
-    $sql = "
-        UPDATE user_lesson_progress
-        SET status = 'completed', progress_percent = 100
-        WHERE user_id = ? AND lesson_id = ?
-    ";
-
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $userId, $lessonId);
-    $result = $stmt->execute();
-    $stmt->close();
-
-    return $result;
-}
-
-function getCompletedLessons(mysqli $conn, int $userId): array
-{
-    $sql = "
-    SELECT l.id, l.title, l.description
-    FROM user_lesson_progress ulp
-    JOIN lessons l ON l.id = ulp.lesson_id
-    WHERE ulp.user_id = ? AND ulp.status = 'completed'
-    ";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    $completedLessons = [];
-    while ($row = $result->fetch_assoc()) {
-        $completedLessons[] = $row;
-    }
-
-    $stmt->close();
-    return $completedLessons;
-}
-
-function getLessonIdByTitle(mysqli $conn, string $title): ?int
-{
-    $sql = "SELECT id FROM lessons WHERE title = ? LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $title);
     $stmt->execute();
     $res = $stmt->get_result();
     $row = $res->fetch_assoc();
     $stmt->close();
-    return $row ? (int)$row['id'] : null;
+    return (int)$row['cnt'];
 }
+
