@@ -10,7 +10,7 @@
 
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
     <div class="col">
-      <a href="?page=wiki_selectors" class="card h-100 text-decoration-none text-reset">
+      <a href="?page=wikiSelectors" class="card h-100 text-decoration-none text-reset">
         <img src="../public/pictures/codeimg.jpg" class="card-img-top" alt="Selectors">
         <div class="card-body">
           <h5 class="card-title">Selectors</h5>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="col">
-      <a href="?page=wiki_box_model" class="card h-100 text-decoration-none text-reset">
+      <a href="?page=wikiBoxModel" class="card h-100 text-decoration-none text-reset">
         <img src="../public/pictures/codeimgcss.jpg" class="card-img-top" alt="Box Model">
         <div class="card-body">
           <h5 class="card-title">Box Model</h5>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="col">
-      <a href="?page=wiki_flexbox" class="card h-100 text-decoration-none text-reset">
+      <a href="?page=wikiFlexbox" class="card h-100 text-decoration-none text-reset">
         <img src="../public/pictures/codeimg.jpg" class="card-img-top" alt="Flexbox">
         <div class="card-body">
           <h5 class="card-title">Flexbox</h5>
@@ -40,7 +40,7 @@
     </div>
 
     <div class="col">
-      <a href="?page=wiki_typography" class="card h-100 text-decoration-none text-reset">
+      <a href="?page=wikiTypography" class="card h-100 text-decoration-none text-reset">
         <img src="../public/pictures/codeimgcss.jpg" class="card-img-top" alt="Typography">
         <div class="card-body">
           <h5 class="card-title">Typography</h5>

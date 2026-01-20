@@ -66,7 +66,7 @@ if (isset($IsLoggedIn) && $IsLoggedIn):
                 if ($isCompleted) $icon = '✅';
                 else if ($isInProgress) $icon = '🟡';
 
-                $href = '?page=lessons_uebungen&id=' . (int)$lesson['id'];
+                $href = '?page=lessonsUebungen&id=' . (int)$lesson['id'];
             ?>
 
               <div class="card mb-3" style="border: 2px solid <?php echo $borderColor; ?>;">

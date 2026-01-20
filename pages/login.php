@@ -16,7 +16,6 @@ if (!empty($_POST) && $_POST["username"] && $_POST["password"]) {
         $_SESSION["user_id"] = getUserIdByUsername($conn, $username);
         session_regenerate_id();
         header("Location: ?page=home");
-        exit();
     } else {
         $_SESSION["user"] = null;
         $_SESSION["logged_in"] = false;

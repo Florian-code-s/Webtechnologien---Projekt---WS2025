@@ -53,7 +53,6 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true):
 endif;
 
 require_once __DIR__ . "/../pages/lessons.php";
-require_once __DIR__ . "/../pages/finishedLessons.php";
 ?>
 
 </div>

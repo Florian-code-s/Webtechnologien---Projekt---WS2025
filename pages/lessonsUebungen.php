@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 <?php endif; ?>
 
-                <form method="post" action="?page=lessons_uebungen&id=<?php echo (int) $lessonId; ?>">
+                <form method="post" action="?page=lessonsUebungen&id=<?php echo (int) $lessonId; ?>">
                     <input type="hidden" name="exercise_id" value="<?php echo $exId; ?>">
 
                     <textarea class="form-control mb-2" name="answer" required></textarea>
@@ -97,6 +97,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button class="btn btn-primary" type="submit">
                         Prüfen
                     </button>
+                    <?php if (isset($exercise['hint_link']) && strcmp($exercise['hint_link'], "") !== 0): ?> <a
+                            href="<?php echo htmlspecialchars($exercise['hint_link']); ?>"
+                            target="_blank"
+                            class="btn btn-secondary">Hinweis öffnen</a>
+                    <?php endif; ?>                  
                 </form>
 
             </div>
