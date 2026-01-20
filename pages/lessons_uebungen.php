@@ -1,10 +1,10 @@
-/* Hier werden dynamisch die Lessons aus der DB geladen */
+
 <?php
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../model/lessonModel.php';
 require_once __DIR__ . '/../model/exerciseModel.php';
 
-
+/* Hier werden dynamisch die Lessons aus der DB geladen */
 if (!isset($IsLoggedIn) || !$IsLoggedIn) {
     header("Location: ?page=login");
     exit;
