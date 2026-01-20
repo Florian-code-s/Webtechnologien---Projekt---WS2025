@@ -87,3 +87,50 @@ function countCompletedLessons(mysqli $conn, int $userId): int
     return (int)$row['cnt'];
 }
 
+function getLessonsWithStatus(mysqli $conn, int $userId): array
+{
+    $sql = "
+        SELECT
+            l.id,
+            l.title,
+            l.description,
+            COALESCE(ulp.status, 'not_started') AS status,
+            COALESCE(ulp.progress_percent, 0) AS progress_percent
+        FROM lessons l
+        LEFT JOIN user_lesson_progress ulp
+            ON ulp.lesson_id = l.id
+           AND ulp.user_id = ?
+        ORDER BY l.id ASC
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $lessons = [];
+    while ($row = $result->fetch_assoc()) {
+        $lessons[] = $row;
+    }
+
+    $stmt->close();
+    return $lessons;
+}
+
+function startLesson(mysqli $conn, int $userId, int $lessonId): bool
+{
+    $sql = "
+        INSERT INTO user_lesson_progress (user_id, lesson_id, status, progress_percent)
+        VALUES (?, ?, 'in_progress', 0)
+        ON DUPLICATE KEY UPDATE status = 'in_progress'
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $userId, $lessonId);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
+}
+
+
