@@ -185,3 +185,15 @@ function getCompletedLessons(mysqli $conn, int $userId): array
     $stmt->close();
     return $completedLessons;
 }
+
+function getLessonIdByTitle(mysqli $conn, string $title): ?int
+{
+    $sql = "SELECT id FROM lessons WHERE title = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $title);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $row = $res->fetch_assoc();
+    $stmt->close();
+    return $row ? (int)$row['id'] : null;
+}

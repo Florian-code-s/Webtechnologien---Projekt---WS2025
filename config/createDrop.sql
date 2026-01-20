@@ -64,3 +64,12 @@ CREATE TABLE IF NOT EXISTS `user_lesson_progress` (
   CONSTRAINT `fk_ulp_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
   CONSTRAINT `fk_ulp_lesson` FOREIGN KEY (`lesson_id`) REFERENCES `lessons`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- insert initial lesson data
+USE create_styling_skills;
+
+INSERT INTO lessons (title, description)
+VALUES (
+  'Background Color',
+  'Schreibe den CSS-Code, um eine Box rot zu färben.'
+);

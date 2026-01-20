@@ -1,28 +1,49 @@
 <?php
 
 
-$lessonId = 'bg_color';
-$completedLessons = isset($_COOKIE['completed_lessons']) ? json_decode($_COOKIE['completed_lessons'], true) : [];
-$isCompleted = in_array($lessonId, $completedLessons);
-$message = '';
-$messageType = '';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../model/lessonModel.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$userId = (int)($_SESSION['user_id'] ?? 0);
+if ($userId <= 0) {
+    header("Location: ?page=login");
+    exit;
+}
+
+$lessonId = getLessonIdByTitle($conn, 'Background Color');
+if ($lessonId === null) die("Lesson nicht in DB");
+
+startLesson($conn, $userId, $lessonId);
+
+$progress = loadProgress($conn, $userId, $lessonId);
+$isCompleted = ($progress && $progress['status'] === 'completed');
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['answer'])) {
-    $userAnswer = trim(strtolower(preg_replace('/\s+/', ' ', $_POST['answer'])));
-    if (strpos($userAnswer, 'background-color') !== false && strpos($userAnswer, 'red') !== false) {
-        if (!in_array($lessonId, $completedLessons)) {
-            $completedLessons[] = $lessonId;
-            setcookie('completed_lessons', json_encode($completedLessons), time() + (86400 * 365), '/');
-            $_COOKIE['completed_lessons'] = json_encode($completedLessons);
-        }
+
+    $userAnswer = strtolower(trim($_POST['answer']));
+
+    if (strpos($userAnswer, 'background-color') !== false &&
+        strpos($userAnswer, 'red') !== false) {
+
+        completeLesson($conn, $userId, $lessonId);
+        $isCompleted = true;
         $message = 'Korrekt! Du hast die Lektion abgeschlossen!';
         $messageType = 'success';
-        $isCompleted = true;
+
     } else {
-        $message = 'Falsch! Der Code muss background-color: red enthalten.';
+        // optional: Zwischenstand speichern (z.B. 50%)
+        saveProgress($conn, $userId, $lessonId, 50, null);
+
+        $message = 'Falsch! Der Code muss "background-color: red" enthalten.';
         $messageType = 'danger';
     }
 }
+
 
 $dataFile = __DIR__ . '/../data/lessons_bg_color.json';
 $lessonData = null;
@@ -80,6 +101,11 @@ if (!$lessonData) {
           <h5 class="mb-0">Dein CSS-Code</h5>
         </div>
         <div class="card-body">
+          <?php if (!empty($message)): ?>
+            <div class="alert alert-<?php echo htmlspecialchars($messageType); ?>" role="alert">
+              <?php echo htmlspecialchars($message); ?>
+            </div>
+        <?php endif; ?>
           <?php if ($isCompleted): ?>
             <div class="alert alert-success" role="alert">
               <h5 class="alert-heading">Lektion abgeschlossen!</h5>
