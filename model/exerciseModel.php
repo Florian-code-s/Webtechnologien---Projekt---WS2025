@@ -59,4 +59,17 @@ function deleteExercise(mysqli $conn, string $id): bool
     return $result;
 }
 
+function getExerciseById(mysqli $conn, int $id): ?array
+{
+    $sql = "SELECT * FROM exercises WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $exercise = $result->fetch_assoc();
+    $stmt->close();
+
+    return $exercise ?: null;
+}
+
 ?>

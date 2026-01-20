@@ -133,4 +133,34 @@ function startLesson(mysqli $conn, int $userId, int $lessonId): bool
     return $result;
 }
 
+function saveProgress(mysqli $conn, int $userId, int $lessonId, int $percent): bool
+{
+    $sql = "
+        INSERT INTO user_lesson_progress (user_id, lesson_id, status, progress_percent)
+        VALUES (?, ?, 'in_progress', ?)
+        ON DUPLICATE KEY UPDATE 
+            progress_percent = VALUES(progress_percent),
+            status = 'in_progress'
+    ";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iii", $userId, $lessonId, $percent);
+    $ok = $stmt->execute();
+    $stmt->close();
+    return $ok;
+}
+
+function completeLesson(mysqli $conn, int $userId, int $lessonId): bool
+{
+    $sql = "
+        UPDATE user_lesson_progress
+        SET status = 'completed', progress_percent = 100
+        WHERE user_id = ? AND lesson_id = ?
+    ";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $userId, $lessonId);
+    $ok = $stmt->execute();
+    $stmt->close();
+    return $ok;
+}
 
