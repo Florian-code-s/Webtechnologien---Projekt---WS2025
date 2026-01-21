@@ -21,7 +21,7 @@ if (isset($_SESSION["logged_in"]) && $_SESSION["logged_in"]) {
 $page = $_GET['page'] ?? 'home';
 
 
-$allowedPages = ['home', 'lessonsUebungen', 'about', 'login', 'register', 'logout', 'lessons', 'lesson_bg_color', 'changePassword', 'profile', 'wiki', 'wikiSelectors', 'wikiBoxModel', 'wikiFlexbox', 'wikiTypography', 'lessonsEditor', 'lessonDetailEditor', 'exerciseDetailEditor'];
+$allowedPages = ['home', 'lessonsUebungen', 'about', 'login', 'register', 'logout', 'lessons', 'changePassword', 'profile', 'wiki', 'wikiSelectors', 'wikiBoxModel', 'wikiFlexbox', 'wikiTypography', 'lessonsEditor', 'lessonDetailEditor', 'exerciseDetailEditor'];
 $adminPages = ['lessonsEditor', 'lessonDetailEditor', 'exerciseDetailEditor'];
 
 
