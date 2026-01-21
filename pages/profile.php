@@ -35,7 +35,7 @@ if (!empty($_POST) && $_POST["email"]) {
         $uploadExt = strtolower(pathinfo($picture["name"], PATHINFO_EXTENSION));
         $date = new DateTime();
         $timestamp = $date->getTimestamp();
-        unlink($imagePath);
+        if(file_exists($imagePath)) unlink($imagePath);
         $imagePath = $uploadDir . $_SESSION["user"] .  "_". $timestamp . "." . $uploadExt;
         if (!move_uploaded_file($picture["tmp_name"], $imagePath)) {
             echo "Fehler beim Hochladen des Profilbildes!";
